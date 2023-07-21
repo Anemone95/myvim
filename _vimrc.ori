@@ -1,0 +1,183 @@
+" 设置系统类型
+let g:IS_MACOS=0
+let g:IS_LINUX=0
+let g:IS_WINDOWS=0
+if has('macunix')
+    let g:IS_MACOS=1
+elseif has('unix') || has('macunix') || has('win32unix')
+    let g:IS_LINUX=1
+elseif has('win16') || has('win32') || has('win64')
+    let g:IS_WINDOWS=1
+endif
+
+let proc_version=system("cat /proc/version")
+function! s:is_wsl()
+    let l:proc_version=system("cat /proc/version")
+    if match(l:proc_version,"Microsoft")==-1 && match(l:proc_version,"microsoft")==-1
+    return 0
+    else
+    return 1
+    endif
+endfunction
+let g:IS_WSL=<SID>is_wsl()
+
+" windows适配python3
+if g:IS_WINDOWS
+    let &pythonthreedll = 'python37.dll'
+    py3 import os; sys.executable=os.path.join(sys.prefix, 'python.exe')
+endif
+
+" 永远使用英文菜单
+if g:IS_WINDOWS
+    silent exec 'language english'
+elseif g:IS_MACOS
+    silent exec 'language en_GB.UTF-8'
+else
+    let s:uname = system("uname -s")
+    if s:uname == "Darwin\n"
+    " in mac-terminal
+    silent exec 'language en_US'
+    else
+    " in linux-terminal
+    silent exec 'language en_US.utf8'
+    endif
+endif
+
+" 解决consle输出乱码
+if g:IS_WINDOWS
+    language messages zh_CN.utf-8
+endif
+
+
+" VIM 配置文件位置
+if g:IS_WINDOWS
+    let g:VIMFILES_PATH=$VIM.'/vimfiles'
+    let g:VIM_PLUG_FILE=$VIM.'/_vimrc.plugins'
+    let g:VIM_GUI_FILE=$VIM.'/_vimrc.gui'
+    let g:VIM_LOCAL_FILE=$VIM.'/_vimrc.local'
+else
+    let g:VIMFILES_PATH='~/.vim'
+    let g:VIM_PLUG_FILE='~/.vimrc.plugins'
+    let g:VIM_GUI_FILE=$VIM.'/.vimrc.gui'
+    let g:VIM_LOCAL_FILE='~/.vimrc.local'
+end
+
+
+
+" set window name
+set titlestring=%t\ (%{expand(\"%:p:.:h\")}/)
+
+
+" multi input layout
+if has('multi_byte_ime')
+    hi Cursor guifg=bg guibg=White gui=NONE
+    hi CursorIM guifg=NONE guibg=Skyblue gui=NONE
+    set iminsert=0 imsearch=0
+endif
+
+
+if has('gui_running')
+    " 指定窗口出现的位置，坐标原点在屏幕左上角
+    winpos 100 10
+    " set window's width to 130 columns and height to 40 rows
+    if exists('+lines')
+    set lines=40
+    endif
+    if exists('+columns')
+    set columns=130
+    endif
+endif
+
+
+" make backup file and leave it around
+set backup
+" setup back and swap directory
+let data_dir = $HOME.'/.data/'
+let backup_dir = data_dir . 'backup'
+let swap_dir = data_dir . 'swap'
+if finddir(data_dir) == ''
+    silent call mkdir(data_dir)
+endif
+if finddir(backup_dir) == ''
+    silent call mkdir(backup_dir)
+endif
+if finddir(swap_dir) == ''
+    silent call mkdir(swap_dir)
+endif
+unlet backup_dir
+unlet swap_dir
+unlet data_dir
+set backupdir=$HOME/.data/backup " where to put backup file
+set directory=$HOME/.data/swap " where to put swap file
+
+
+" 关闭上方自动补全提示窗口
+setlocal completeopt-=preview
+
+" Fold text
+set foldmethod=syntax
+set foldenable
+if line("w$")>700
+    set foldlevelstart=0
+else
+    set foldlevelstart=9999
+endif
+
+
+" 默认改变文件件格式为unix
+function! FormatUnix()
+    if &modifiable==1
+    set fileformat=unix
+    set fileencoding=utf-8
+    endif
+endfunction
+autocmd! BufNewFile,BufRead * call FormatUnix()
+
+
+autocmd! BufRead,BufNewFile,BufEnter *.facts setlocal noexpandtab
+autocmd! FileType ocaml setlocal tabstop=2 shiftwidth=2
+
+
+" 新打开文件不隐藏文本
+autocmd BufEnter * set concealcursor=
+
+" official diff settings
+set diffexpr=g:MyDiff()
+function! g:MyDiff()
+    let opt = '-a --binary -w '
+    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+    let arg1 = v:fname_in
+    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+    let arg2 = v:fname_new
+    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+    let arg3 = v:fname_out
+    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+    silent execute '!' .  'diff ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+endfunction
+
+
+" 设置coding为utf8
+nmap su :set fileencoding=utf-8<cr>:set fileformat=unix<cr>
+" 设置coding为gbkset mouse=a
+
+nmap sg :set fileencoding=gbk<cr>:set fileformat=dos<cr>
+
+" Ctrl+h/j/k/l切换窗口
+noremap <c-k> <c-w>k
+noremap <c-j> <c-w>j
+noremap <c-h> <c-w>h
+noremap <c-l> <c-w>l
+
+" autohotkey
+noremap <Up> <c-w>k
+noremap <Down> <c-w>j
+noremap <Left> <c-w>h
+noremap <Right> <c-w>l
+
+" 微调 ui
+hi comment guifg=grey
+hi comment ctermfg=grey
+hi visual guibg=#666666
+hi visual ctermfg=242
+

@@ -1,0 +1,116 @@
+Plug 'preservim/nerdtree'
+Plug 'terryma/vim-multiple-cursors'
+set surround
+set clipboard+=ideaput
+set ideajoin
+
+" 书签
+nmap mm <action>(ToggleBookmark)
+nmap mp <action>(GotoPreviousBookmark)
+nmap mn <action>(GotoNextBookmark)
+
+" 运行
+nmap <F9> <action>(Run)
+imap <F9> <action>(Run)
+nmap <S-F9> <action>(RunClass)
+imap <S-F9> <action>(RunClass)
+" 调试
+nmap <F10> <action>(Debug)
+imap <F10> <action>(Debug)
+
+nmap <F8> <action>(StepOver)
+nmap <F7> <action>(StepInto)
+nmap <S-F7> <action>(StepOut)
+nmap <F6> <action>(Resume)
+
+" Set breakpoint
+nmap <leader>b <action>(ToggleLineBreakPoint)
+
+" Tab
+nmap bn <action>(NextTab)
+nmap bp <action>(PreviousTab)
+
+" 搜索
+nmap <leader>ff <action>(SearchEverywhere)
+nmap <leader>fe <action>(FindInPath)
+nmap <leader>fr <action>(RecentChangedFiles)
+nmap <leader>gr <action>(RecentChangedFiles)
+nmap <leader>s <action>(FileStructurePopup)
+" noremap \fp <action>(FindInPath)
+" noremap \ff <action>(GotoFile)
+" noremap \fc <action>(GotoClass)
+" noremap \gg <action>(FindUsages)
+" noremap \fi <action>(GotoDeclaration)
+
+" 代码折叠
+nmap zo <action>(ExpandRegion)
+nmap zz <action>(CollapseRegion)
+nmap za <action>(CollapseAllRegions)
+nmap <space> <action>(CollapseRegion)
+
+" 格式化代码
+nmap = <action>(ReformatCode)
+vmap = <action>(ReformatCode)
+
+" clear unused imports
+nmap <leader>w <action>(OptimizeImports):%s/\s\+$//g<CR>
+
+
+" Generate
+nmap \ge j<action>(Generate)
+imap \ge <Esc>j<action>(Generate)
+
+"Ctrl+h/j/k/l切换窗口
+nmap <Up> <c-w>k
+nmap <Down> <c-w>j
+nmap <Left> <c-w>h
+nmap <Right> <c-w>l
+
+"auto correct
+map \cr <action>(ShowIntentionActions)
+imap \cr <action>(ShowIntentionActions)
+
+" 注释
+nmap \ci <action>(CommentByLineComment)
+imap \ci <Esc><action>(CommentByLineComment)
+vmap \ci <action>(VimVisualSwapSelections)<action>(CommentByLineComment)<Esc>
+
+
+" 多行编辑
+vmap <C-n> <A-n>
+vmap <C-x> <A-x>
+
+" rename variables
+nmap <leader>rn <action>(RenameElement)
+
+" 函数跳转
+" nmap gd <c-]><esc>
+nmap gi <action>(GotoImplementation)
+nmap gr <action>(FindUsages)
+nmap go <action>(Back)
+nmap gp <action>(JumpToLastChange)
+nmap gn <action>(JumpToNextChange)
+nmap gq <action>(GotoNextError)
+
+" sethandler <F2> a:vim
+nmap <F2> :NERDTreeToggle<CR>
+nmap <F3> <action>(ActivateTerminalToolWindow)
+nmap <F4> :NERDTreeFind<CR>
+nmap <F12> <action>(HideAllWindows)
+
+" selection quotes
+nmap <Leader>v vi"
+
+" 选择模式扩大选择范围
+vmap v <Action>(EditorSelectWord)
+" 选择模式缩小选择范围
+vmap V <Action>(EditorUnSelectWord)
+
+set ideavimsupport=
+
+" support options key
+set macmeta
+
+" like key bindings
+source $HOME/.vimrc.base
+
