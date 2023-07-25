@@ -4,6 +4,7 @@ local lang2server = {
     },
     venv = {
         pyright = {},
+        jedi_language_server = {}
     },
     cargo = {
         neocmake = {},
@@ -133,8 +134,10 @@ return {
             {
                 "j-hui/fidget.nvim",
                 tag = "legacy",
+                event = "LspAttach",
             },
             "nvimdev/lspsaga.nvim",
+            "hrsh7th/nvim-cmp",
 
         },
         config = function()
@@ -155,7 +158,7 @@ return {
                     vim.lsp.buf.format { async = true }
                 end, { desc = "[F]ormat code" })
                 nmap('K', "<cmd>Lspsaga hover_doc<CR>", 'Hover Documentation')
-                nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+                nmap'cmp_nvim_lsp'('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
                 nmap('gd', require "telescope.builtin".lsp_definitions, '[G]oto [D]efinition')
                 -- nmap('gi', require "telescope.builtin".lsp_implementations, '[G]oto [I]mplementation')
                 nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
@@ -184,6 +187,7 @@ return {
             require("fidget").setup()
             require("lspsaga").setup()
             require("mason").setup()
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
             require("mason-lspconfig").setup({
                 automatic_installation = false,
                 ensure_installed = vim.tbl_keys(servers),
@@ -192,10 +196,23 @@ return {
                         require("lspconfig")[server_name].setup {
                             settings = servers[server_name],
                             on_attach = on_attach,
+                            capabilities = capabilities,
                         }
                     end,
                 }
             })
+            vim.opt.updatetime = 500
+            vim.api.nvim_create_autocmd(
+                "CursorHold",
+                {
+                    pattern = {"*"},
+                    callback = function()
+                        if not require("cmp").visible() then
+                            local status, err = pcall(function() vim.lsp.buf.hover({focusable=false}) end)
+                        end
+                    end
+                }
+            )
         end
     },
 }
