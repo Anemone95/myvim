@@ -111,6 +111,9 @@ set matchtime=0
 " no autochchdir
 set noacd
 
+" 当前行高亮
+set cursorline
+
 " mapper
 let mapleader ="\\"
 
@@ -138,3 +141,4 @@ map <C-a> ggVG
 " paste 后不替换
 vmap p "_dhp
 
+nmap gp '.

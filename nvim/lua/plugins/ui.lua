@@ -9,8 +9,7 @@ return {
     -- 状态栏
     {
         "nvim-lualine/lualine.nvim",
-        dependencies = {
-            "nvim-tree/nvim-web-devicons",
+        dependencies = { "nvim-tree/nvim-web-devicons",
             "utilyre/barbecue.nvim",
             "SmiteshP/nvim-navic",
         },
@@ -58,11 +57,11 @@ return {
                 show_current_context = false,
                 -- space_char_blankline = " ",
                 -- char_highlight_list = {
-                    -- "IndentBlanklineIndent1",
-                    -- "IndentBlanklineIndent2",
-                    -- "IndentBlanklineIndent3",
-                    -- "IndentBlanklineIndent4",
-                    -- "IndentBlanklineIndent5",
+                -- "IndentBlanklineIndent1",
+                -- "IndentBlanklineIndent2",
+                -- "IndentBlanklineIndent3",
+                -- "IndentBlanklineIndent4",
+                -- "IndentBlanklineIndent5",
                 -- },
             })
         end
@@ -71,10 +70,26 @@ return {
         "lewis6991/gitsigns.nvim",
         config = true
     },
+    -- 启动界面
     {
         "goolord/alpha-nvim",
+        event = "VimEnter",
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function()
+            local dashboard = require'alpha.themes.dashboard'
+            dashboard.section.buttons.val = {
+                dashboard.button("n", "  New file", "<cmd>ene <CR>"),
+                dashboard.button("f", "󰈞  Find file", "<cmd>Telescope find_files<CR>"),
+                dashboard.button("r", "  Recently opened files", "<cmd>Telescope oldfiles<CR>"),
+                dashboard.button("g", "󰊄  Grep files", "<cmd>Telescope live_grep<CR>"),
+                dashboard.button("m", "  Jump to bookmarks"),
+                dashboard.button("s", "  Open last session"),
+                dashboard.button('s', '  Settings', ':e $MYVIMRC<CR>'),
+                dashboard.button('u', '  Update plugins', ':Lazy update<CR>'),
+                dashboard.button('q', '  Quit', ':qa<CR>'),
+            }
             require('alpha').setup(require('alpha.themes.dashboard').config)
+
         end
     },
     -- 相同字符高亮
@@ -129,5 +144,5 @@ return {
                 min_count_to_highlight = 1,
             })
         end
-    }
+    },
 }

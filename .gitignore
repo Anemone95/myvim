@@ -1,1 +1,4 @@
 fonts/
+nvim/lazy-lock.json
+.DS_Store
+*.un~
