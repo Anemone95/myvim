@@ -202,17 +202,18 @@ return {
                 }
             })
             vim.opt.updatetime = 500
-            vim.api.nvim_create_autocmd(
-                "CursorHold",
-                {
-                    pattern = {"*"},
-                    callback = function()
-                        if not require("cmp").visible() then
-                            local status, err = pcall(function() vim.lsp.buf.hover({focusable=false}) end)
-                        end
-                    end
-                }
-            )
+            -- FIXME: not very useful
+            -- vim.api.nvim_create_autocmd(
+                -- "CursorHold",
+                -- {
+                    -- pattern = {"*"},
+                    -- callback = function()
+                        -- if not require("cmp").visible() then
+                            -- local status, err = pcall(function() vim.lsp.buf.hover({focusable=false}) end)
+                        -- end
+                    -- end
+                -- }
+            -- )
         end
     },
 }

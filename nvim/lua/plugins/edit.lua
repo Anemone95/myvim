@@ -68,19 +68,24 @@ return {
         end
     },
     {
-        "echasnovski/mini.comment",
-        config = true,
-        mappings = {
-            -- Toggle comment (like `gcip` - comment inner paragraph) for both
-            -- Normal and Visual modes
-            comment = '<leader>ci',
-
-            -- Toggle comment on current line
-            comment_line = 'gcc',
-
-            -- Define 'comment' textobject (like `dgc` - delete whole comment block)
-            textobject = 'gc',
-        },
+        "numToStr/Comment.nvim",
+        config = function()
+            require('Comment').setup({
+                toggler = {
+                    ---Line-comment toggle keymap
+                    line = '\\ci',
+                    ---Block-comment toggle keymap
+                    block = '\\cb',
+                },
+                ---LHS of operator-pending mappings in NORMAL and VISUAL mode
+                opleader = {
+                    ---Line-comment keymap
+                    line = 'ci',
+                    ---Block-comment keymap
+                    block = 'cb',
+                },
+            })
+        end
     },
     -- {
         -- 'echasnovski/mini.ai',
