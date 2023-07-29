@@ -14,12 +14,12 @@ fi
 if [ -z "$SSH_CONNECTION" ]; then
     if ! command -v venv &> /dev/null
     then
-        echo "'venv' doesn't exist, please install it and try again."
+        echo "'venv'(https://docs.python.org/3/library/venv.html) doesn't exist, please install it and try again."
         exit 1
     fi
     if ! command -v npm &> /dev/null
     then
-        echo "'npm' doesn't exist, please install it and try again."
+        echo "'npm'(https://nodejs.org/) doesn't exist, please install it and try again."
         exit 1
     fi
 fi
