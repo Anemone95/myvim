@@ -120,13 +120,15 @@ end
 
 return {
     {
-        "williamboman/mason.nvim",
-        build = { ":MasonUpdate", "" } -- :MasonUpdate updates registry contents
-    },
-    {
         "neovim/nvim-lspconfig",
+        cmd = { "Mason", "Neoconf" },
+        event = { "BufReadPost", "BufNewFile" },
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
+            {
+                "williamboman/mason.nvim",
+                build = { ":MasonUpdate", "" } -- :MasonUpdate updates registry contents
+            },
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig",
             "folke/neoconf.nvim",

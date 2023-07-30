@@ -9,8 +9,9 @@ return {
     -- 状态栏
     {
         "nvim-lualine/lualine.nvim",
-        event = "VeryLazy"
-        dependencies = { "nvim-tree/nvim-web-devicons",
+        event = "VeryLazy",
+        dependencies = {
+            "nvim-tree/nvim-web-devicons",
             "utilyre/barbecue.nvim",
             "SmiteshP/nvim-navic",
         },
@@ -29,7 +30,7 @@ return {
     -- bufferline
     {
         'akinsho/bufferline.nvim',
-        event = "VeryLazy"
+        event = "VeryLazy",
         version = "*",
         dependencies = 'nvim-tree/nvim-web-devicons',
         config = {
@@ -44,7 +45,7 @@ return {
     },
     {
         "lukas-reineke/indent-blankline.nvim",
-        event = "VeryLazy"
+        event = "VeryLazy",
         version = "*",
         config = function()
             vim.cmd [[highlight IndentBlanklineIndent1 guifg=#86bbd8 gui=nocombine]]
@@ -71,7 +72,7 @@ return {
     },
     {
         "lewis6991/gitsigns.nvim",
-        event = "VeryLazy"
+        event = "VeryLazy",
         config = true
     },
     -- 启动界面
@@ -99,7 +100,7 @@ return {
     -- 相同字符高亮
     {
         "RRethy/vim-illuminate",
-        event = "VeryLazy"
+        event = "VeryLazy",
         config = function ()
             require('illuminate').configure({
                 -- providers: provider used to get references in the buffer, ordered by priority
@@ -153,7 +154,7 @@ return {
     -- terminal
     {
         'akinsho/toggleterm.nvim',
-        event = "VeryLazy"
+        event = "VeryLazy",
         version = "*",
         config = function()
             require("toggleterm").setup({

@@ -7,6 +7,18 @@ return {
             build = 'make'
         },
     },
+    keys = {
+        { '<leader>ff', function() return require('telescope.builtin').find_files() end },
+        { '<leader>fe', function() return require('telescope.builtin').live_grep end },
+        { "<leader>\\", function() return require('telescope.builtin').buffers end },
+        { '<leader>fr', function() return require('telescope.builtin').oldfiles end },
+        { '<leader>fs', function()
+            require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+                winblend = 10,
+                previewer = false,
+            })
+        end },
+    },
     config = function ()
         require('telescope').setup{
           defaults = {
@@ -40,17 +52,5 @@ return {
             }
         }
         require("telescope").load_extension('fzf')
-        local builtin = require('telescope.builtin')
-        vim.keymap.set('n', '<leader>ff', builtin.find_files, {desc = "Find files"})
-        vim.keymap.set('n', '<leader>fe', builtin.live_grep, {desc = "Find text"})
-        vim.keymap.set('n', '<leader>\\', builtin.buffers, {desc = "Find buffers"})
-        vim.keymap.set('n', '<leader>fr', builtin.oldfiles, {desc = 'Find recently opened files'})
-        vim.keymap.set('n', '<leader>fs', function()
-            require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-                winblend = 10,
-                previewer = false,
-            })
-        end, {desc = '[/] Fuzzily search in current buffer'})
-        vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
     end
 }
