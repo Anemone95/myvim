@@ -15,7 +15,7 @@ if [ -z "$SSH_CONNECTION" ]; then
     if ! command -v venv &> /dev/null
     then
         echo "'venv'(https://docs.python.org/3/library/venv.html) doesn't exist, please install it and try again."
-        exit 1
+        # exit 1
     fi
     if ! command -v npm &> /dev/null
     then
@@ -47,6 +47,8 @@ then
 fi
 
 rm -rf $HOME/.config/nvim
+rm -r ~/.local/share/nvim/
+rm -r ~/.local/state/nvim/
 ln -s -f $GIT_DIR/_vimrc ~/.vimrc
 ln -s -f $GIT_DIR/nvim ~/.config/nvim
 ln -s -f $GIT_DIR/_vimrc.base ~/.vimrc.base

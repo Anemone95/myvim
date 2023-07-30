@@ -142,3 +142,13 @@ map <C-a> ggVG
 vmap p "_dhp
 
 nmap gp '.
+
+nmap <c-k> <c-w>k
+nmap <c-j> <c-w>j
+nmap <c-h> <c-w>h
+nmap <c-l> <c-w>l
+
+noremap <Up> <c-w>k
+noremap <Down> <c-w>j
+noremap <Left> <c-w>h
+noremap <Right> <c-w>l

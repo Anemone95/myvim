@@ -12,20 +12,22 @@ vim.keymap.set("n", "bp", "<cmd>bprevious<CR>")
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '>-2<CR>gv=gv")
+
+vim.keymap.set("n", "<space>", "@=((foldclosed(line('.')) < 0) ? 'zc' : 'zO')<CR>")
+vim.keymap.set("n", "za", "zM")
+vim.keymap.set("n", "zo>", "zO")
 -- 导入数学符号map
 vim.cmd('source ~/.vimrc.unimap')
 
 -- 设置字体
-vim.opt.guifont = "Hack:h11:cANSI"
+vim.opt.guifont = "Hack:h14"
+
 
 if os.getenv("OS") == "Windows_NT" then
     vim.opt.guifontwide = "YouYuan:h10.5:cGB2312"
-elseif os.getenv("HOME") == '/Users' then
-    vim.opt.guifont = "Hack:h11:cANSI"
-else
+elseif not os.getenv("HOME") == '/Users' then
     vim.opt.guifontwide="WenQuanYi Micro Hei 11"
 end
-
 
 local is_ssh = os.getenv("SSH_CONNECTION") or os.getenv("SSH_CLIENT")
 if not is_ssh then
@@ -52,3 +54,6 @@ if not is_ssh then
     require("lazy").setup("plugins", opts)
 end
 
+if vim.g.neovide then
+    vim.g.neovide_cursor_animation_length = 0
+end
