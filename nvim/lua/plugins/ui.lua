@@ -1,9 +1,9 @@
-return {
+local ret = {
     -- 主题
     {
         "folke/tokyonight.nvim",
         config = function()
-            vim.cmd[[colorscheme tokyonight-storm]]
+            vim.cmd [[colorscheme tokyonight-storm]]
         end
     },
     -- 状态栏
@@ -38,7 +38,7 @@ return {
                 hover = {
                     enabled = true,
                     delay = 200,
-                    reveal = {'close'}
+                    reveal = { 'close' }
                 }
             }
         }
@@ -56,18 +56,18 @@ return {
             -- vim.opt.list = true
             -- vim.g.indent_blankline_char = "┊"
             char = "│",
-            require("indent_blankline").setup({
-                show_trailing_blankline_indent = false,
-                show_current_context = false,
-                -- space_char_blankline = " ",
-                -- char_highlight_list = {
-                -- "IndentBlanklineIndent1",
-                -- "IndentBlanklineIndent2",
-                -- "IndentBlanklineIndent3",
-                -- "IndentBlanklineIndent4",
-                -- "IndentBlanklineIndent5",
-                -- },
-            })
+                require("indent_blankline").setup({
+                    show_trailing_blankline_indent = false,
+                    show_current_context = false,
+                    -- space_char_blankline = " ",
+                    -- char_highlight_list = {
+                    -- "IndentBlanklineIndent1",
+                    -- "IndentBlanklineIndent2",
+                    -- "IndentBlanklineIndent3",
+                    -- "IndentBlanklineIndent4",
+                    -- "IndentBlanklineIndent5",
+                    -- },
+                })
         end
     },
     {
@@ -80,9 +80,9 @@ return {
         "goolord/alpha-nvim",
         event = "VimEnter",
         dependencies = { 'nvim-tree/nvim-web-devicons',
-                        'nvim-telescope/telescope.nvim',},
+            'nvim-telescope/telescope.nvim', },
         config = function()
-            local dashboard = require'alpha.themes.dashboard'
+            local dashboard = require 'alpha.themes.dashboard'
             dashboard.section.buttons.val = {
                 dashboard.button("n", "  New file", "<cmd>ene <CR>"),
                 dashboard.button("f", "󰈞  Find file", "<cmd>Telescope find_files<CR>"),
@@ -95,14 +95,13 @@ return {
                 dashboard.button('q', '  Quit', ':qa<CR>'),
             }
             require('alpha').setup(require('alpha.themes.dashboard').config)
-
         end
     },
     -- 相同字符高亮
     {
         "RRethy/vim-illuminate",
         event = "VeryLazy",
-        config = function ()
+        config = function()
             require('illuminate').configure({
                 -- providers: provider used to get references in the buffer, ordered by priority
                 providers = {
@@ -159,23 +158,52 @@ return {
         version = "*",
         config = function()
             require("toggleterm").setup({
-                  size = 10,
-                  close_on_exit = true,
-                  open_mapping = "<c-\\>",
+                size = 10,
+                close_on_exit = true,
+                open_mapping = "<c-\\>",
             })
-            vim.keymap.set({"n","t"}, "<F3>", "<cmd>ToggleTerm<CR>",{desc = {"toggle terminal"}})
+            vim.keymap.set({ "n", "t" }, "<F3>", "<cmd>ToggleTerm<CR>", { desc = { "toggle terminal" } })
             function _G.set_terminal_keymaps()
-              local opts = {buffer = 0}
-              vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-              vim.keymap.set('t', '<c-h>', [[<Cmd>wincmd h<CR>]], opts)
-              vim.keymap.set('t', '<c-j>', [[<Cmd>wincmd j<CR>]], opts)
-              vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-              vim.keymap.set('t', '<c-l>', [[<Cmd>wincmd l<CR>]], opts)
-              vim.keymap.set('t', '<c-w>', [[<C-\><C-n><C-w>]], opts)
+                local opts = { buffer = 0 }
+                vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+                vim.keymap.set('t', '<c-h>', [[<Cmd>wincmd h<CR>]], opts)
+                vim.keymap.set('t', '<c-j>', [[<Cmd>wincmd j<CR>]], opts)
+                vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
+                vim.keymap.set('t', '<c-l>', [[<Cmd>wincmd l<CR>]], opts)
+                vim.keymap.set('t', '<c-w>', [[<C-\><C-n><C-w>]], opts)
             end
 
             -- if you only want these mappings for toggle term use term://*toggleterm#* instead
             vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
         end
-    }
+    },
 }
+
+if vim.g.neovide then
+    table.insert(ret,
+        {
+            "rcarriga/nvim-notify",
+            config = true,
+        }
+    )
+    table.insert(ret,
+        {
+            "folke/noice.nvim",
+            event = "VeryLazy",
+            opts = {
+                -- add any options here
+            },
+            dependencies = {
+                -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+                "MunifTanjim/nui.nvim",
+                -- OPTIONAL:
+                --   `nvim-notify` is only needed, if you want to use the notification view.
+                --   If not available, we use `mini` as the fallback
+                "rcarriga/nvim-notify",
+            }
+        }
+    )
+end
+
+
+return ret;

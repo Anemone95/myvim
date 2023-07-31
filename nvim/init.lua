@@ -20,7 +20,7 @@ vim.keymap.set("n", "zo>", "zO")
 vim.cmd('source ~/.vimrc.unimap')
 
 -- 设置字体
-vim.opt.guifont = "Hack:h14"
+vim.opt.guifont = "Hack:h15"
 
 
 if os.getenv("OS") == "Windows_NT" then

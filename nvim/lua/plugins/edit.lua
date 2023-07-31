@@ -1,6 +1,6 @@
 local ignore = {
-    buftype = {"quickfix", "nofile", "help", 'neo-tree', "neo-tree-popup", "notify", "fidget"},
-    filetype = {"gitcommit", "gitrebase", "svn", "hgcommit", 'terminal', "quickfix"},
+    buftype = { "quickfix", "nofile", "help", 'neo-tree', "neo-tree-popup", "notify", "fidget" },
+    filetype = { "gitcommit", "gitrebase", "svn", "hgcommit", 'terminal', "quickfix" },
 }
 return {
     -- 输入成对括号
@@ -19,16 +19,40 @@ return {
     {
         "folke/flash.nvim",
         event = "VeryLazy",
-          ---@type Flash.Config
-          opts = {},
-          -- stylua: ignore
-          keys = {
+        ---@type Flash.Config
+        opts = {},
+        -- stylua: ignore
+        keys = {
             { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-            { "S", mode = { "n", "o", "x" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
-            { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-            { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-            { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
-          },
+            {
+                "S",
+                mode = { "n", "o", "x" },
+                function() require("flash").treesitter() end,
+                desc =
+                "Flash Treesitter"
+            },
+            {
+                "r",
+                mode = "o",
+                function() require("flash").remote() end,
+                desc =
+                "Remote Flash"
+            },
+            {
+                "R",
+                mode = { "o", "x" },
+                function() require("flash").treesitter_search() end,
+                desc =
+                "Treesitter Search"
+            },
+            {
+                "<c-s>",
+                mode = { "c" },
+                function() require("flash").toggle() end,
+                desc =
+                "Toggle Flash Search"
+            },
+        },
     },
     -- 驼峰命名法的拼写检查
     {
@@ -51,19 +75,36 @@ return {
             "MunifTanjim/nui.nvim",
         },
         config = function()
-            vim.keymap.set({"n", "v"},"<F2>",[[<cmd>Neotree toggle<CR>]])
+            vim.keymap.set({ "n", "v" }, "<F2>", [[<cmd>Neotree toggle<CR>]])
             require("neo-tree").setup({
                 window = {
-                  position = "left",
-                  width = 25,
+                    position = "left",
+                    width = 35,
                 },
                 open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "Outline" },
                 sources = { "filesystem", "buffers", "git_status", "document_symbols" },
-            filesystem = {
-                bind_to_cwd = false,
-                follow_current_file = { enabled = true },
-                use_libuv_file_watcher = true,
-              },
+                filesystem = {
+                    bind_to_cwd = false,
+                    follow_current_file = { enabled = true },
+                    use_libuv_file_watcher = true,
+                },
+                default_component_configs = {
+                    git_status = {
+                        symbols = {
+                            -- Change type
+                            added     = "", -- or , but this is redundant info if you use git_status_colors on the name
+                            modified  = "", -- or "", but this is redundant info if you use git_status_colors on the name
+                            deleted   = "✖", -- this can only be used in the git_status source
+                            renamed   = "󰁕", -- this can only be used in the git_status source
+                            -- Status type
+                            untracked = "",
+                            ignored   = "",
+                            unstaged  = "✚",
+                            staged    = "",
+                            conflict  = "",
+                        }
+                    },
+                }
             })
         end
     },
@@ -88,13 +129,13 @@ return {
         end
     },
     -- {
-        -- 'echasnovski/mini.ai',
-        -- config = true,
+    -- 'echasnovski/mini.ai',
+    -- config = true,
     -- },
     {
         "ethanholz/nvim-lastplace",
         config = function()
-            require'nvim-lastplace'.setup {
+            require 'nvim-lastplace'.setup {
                 lastplace_ignore_buftype = ignore.buftype,
                 lastplace_ignore_filetype = ignore.filetype,
                 lastplace_open_folds = true
@@ -122,4 +163,28 @@ return {
             )
         end
     },
+    -- 末尾去空格
+    {
+        'johnfrankmorgan/whitespace.nvim',
+        event = "VeryLazy",
+        config = function()
+            require('whitespace-nvim').setup({
+                -- configuration options and their defaults
+
+                -- `highlight` configures which highlight is used to display
+                -- trailing whitespace
+                highlight = 'DiffDelete',
+
+                -- `ignored_filetypes` configures which filetypes to ignore when
+                -- displaying trailing whitespace
+                ignored_filetypes = { 'TelescopePrompt', 'Trouble', 'help' },
+
+                -- `ignore_terminal` configures whether to ignore terminal buffers
+                ignore_terminal = true,
+            })
+
+            -- remove trailing whitespace with a keybinding
+            vim.keymap.set('n', '<Leader>w', require('whitespace-nvim').trim)
+        end
+    }
 }
