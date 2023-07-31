@@ -1,6 +1,6 @@
 local ignore = {
-    buftype = { "quickfix", "nofile", "help", 'neo-tree', "neo-tree-popup", "notify", "fidget" },
-    filetype = { "gitcommit", "gitrebase", "svn", "hgcommit", 'terminal', "quickfix" },
+    buftype = { "quickfix", "nofile", "help", 'neo-tree', "neo-tree-popup", "notify", "fidget", "terminal" },
+    filetype = { "gitcommit", "gitrebase", "svn", "hgcommit", 'terminal', "quickfix", "Trouble", "qf", "Outline", "toggleterm" },
 }
 return {
     -- 输入成对括号
@@ -79,7 +79,7 @@ return {
             require("neo-tree").setup({
                 window = {
                     position = "left",
-                    width = 35,
+                    width = 45,
                 },
                 open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "Outline" },
                 sources = { "filesystem", "buffers", "git_status", "document_symbols" },
@@ -177,7 +177,7 @@ return {
 
                 -- `ignored_filetypes` configures which filetypes to ignore when
                 -- displaying trailing whitespace
-                ignored_filetypes = { 'TelescopePrompt', 'Trouble', 'help' },
+                ignored_filetypes = ignore.filetype,
 
                 -- `ignore_terminal` configures whether to ignore terminal buffers
                 ignore_terminal = true,

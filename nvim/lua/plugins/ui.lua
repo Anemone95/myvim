@@ -182,12 +182,6 @@ local ret = {
 if vim.g.neovide then
     table.insert(ret,
         {
-            "rcarriga/nvim-notify",
-            config = true,
-        }
-    )
-    table.insert(ret,
-        {
             "folke/noice.nvim",
             event = "VeryLazy",
             opts = {
