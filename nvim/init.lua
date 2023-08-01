@@ -26,7 +26,7 @@ vim.opt.guifont = "Hack:h15"
 if os.getenv("OS") == "Windows_NT" then
     vim.opt.guifontwide = "YouYuan:h10.5:cGB2312"
 elseif not os.getenv("HOME") == '/Users' then
-    vim.opt.guifontwide="WenQuanYi Micro Hei 11"
+    vim.opt.guifontwide = "WenQuanYi Micro Hei 11"
 end
 
 local is_ssh = os.getenv("SSH_CONNECTION") or os.getenv("SSH_CLIENT")
@@ -34,15 +34,15 @@ if not is_ssh then
     -- lazyvim 插件
     local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
     if not vim.loop.fs_stat(lazypath) then
-      vim.fn.system({
-        "git",
-        "clone",
-        "--depth=1",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
-        lazypath,
-      })
+        vim.fn.system({
+            "git",
+            "clone",
+            "--depth=1",
+            "--filter=blob:none",
+            "https://github.com/folke/lazy.nvim.git",
+            "--branch=stable", -- latest stable release
+            lazypath,
+        })
     end
     vim.opt.rtp:prepend(lazypath)
     local opts = {
@@ -56,4 +56,6 @@ end
 
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
+    vim.keymap.set('c', '<D-v>', '<C-r>+', {noremap = true})
+    vim.keymap.set('i', '<D-v>', '<Cmd>put +<CR>', {})
 end

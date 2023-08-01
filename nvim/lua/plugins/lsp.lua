@@ -127,7 +127,7 @@ return {
         dependencies = {
             {
                 "williamboman/mason.nvim",
-                build = { ":MasonUpdate", "" } -- :MasonUpdate updates registry contents
+                build = { ":MasonUpdate" } -- :MasonUpdate updates registry contents
             },
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig",
