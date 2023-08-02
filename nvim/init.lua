@@ -15,7 +15,7 @@ vim.keymap.set("v", "K", ":m '>-2<CR>gv=gv")
 
 vim.keymap.set("n", "<space>", "@=((foldclosed(line('.')) < 0) ? 'zc' : 'zO')<CR>")
 vim.keymap.set("n", "za", "zM")
-vim.keymap.set("n", "zo>", "zO")
+vim.keymap.set("n", "zo", "zO")
 -- 导入数学符号map
 vim.cmd('source ~/.vimrc.unimap')
 
@@ -54,8 +54,10 @@ if not is_ssh then
     require("lazy").setup("plugins", opts)
 end
 
+
+
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
-    vim.keymap.set('c', '<D-v>', '<C-r>+', {noremap = true})
+    vim.keymap.set('c', '<D-v>', '<C-r>+', { noremap = true })
     vim.keymap.set('i', '<D-v>', '<Cmd>put +<CR>', {})
 end

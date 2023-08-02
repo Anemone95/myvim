@@ -9,9 +9,9 @@ return {
     },
     keys = {
         { '<leader>ff', function() return require('telescope.builtin').find_files() end },
-        { '<leader>fe', function() return require('telescope.builtin').live_grep end },
-        { "<leader>\\", function() return require('telescope.builtin').buffers end },
-        { '<leader>fr', function() return require('telescope.builtin').oldfiles end },
+        { '<leader>fe', function() return require('telescope.builtin').live_grep() end },
+        { "<leader>\\", function() return require('telescope.builtin').buffers() end },
+        { '<leader>fr', function() return require('telescope.builtin').oldfiles() end },
         { '<leader>fs', function()
             require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
                 winblend = 10,

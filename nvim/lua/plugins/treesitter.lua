@@ -2,6 +2,8 @@ local load_textobjects = false
 return {
     {
         "nvim-treesitter/nvim-treesitter",
+        lazy = false,
+        priority = 1000,
         version = false, -- last release is way too old and doesn't work on Windows
         build = ":TSUpdate",
         event = { "BufReadPost", "BufNewFile" },
@@ -115,9 +117,18 @@ return {
                     end
                 end
             end
+            vim.opt.foldlevel = 200
             vim.opt.foldmethod = "expr"
             vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-            vim.opt.foldenable = false
+            -- 否则第一个 buffer 不支持折叠
+            vim.api.nvim_create_autocmd('VimEnter', {
+                callback = function()
+                    vim.defer_fn(function()
+                        vim.cmd("set foldexpr=nvim_treesitter#foldexpr()")
+                    end, 1000)
+                end,
+            })
+            -- vim.opt.foldenable = false
         end,
     },
 }

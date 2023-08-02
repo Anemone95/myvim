@@ -1,6 +1,7 @@
 local ignore = {
-    buftype = { "quickfix", "nofile", "help", 'neo-tree', "neo-tree-popup", "notify", "fidget", "terminal" },
-    filetype = { "gitcommit", "gitrebase", "svn", "hgcommit", 'terminal', "quickfix", "Trouble", "qf", "Outline", "toggleterm" },
+    buftype = { "quickfix", "nofile", "help", 'neo-tree', "neo-tree-popup", "notify", "fidget", "terminal", "prompt" },
+    filetype = { "gitcommit", "gitrebase", "svn", "hgcommit", 'terminal', "quickfix", "Trouble", "qf", "Outline",
+        "toggleterm", "prompt" },
 }
 return {
     -- 输入成对括号
@@ -79,7 +80,7 @@ return {
             require("neo-tree").setup({
                 window = {
                     position = "left",
-                    width = 45,
+                    width = 35,
                 },
                 open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "Outline" },
                 sources = { "filesystem", "buffers", "git_status", "document_symbols" },
@@ -164,27 +165,25 @@ return {
         end
     },
     -- 末尾去空格
-    {
-        'johnfrankmorgan/whitespace.nvim',
-        event = "VeryLazy",
-        config = function()
-            require('whitespace-nvim').setup({
-                -- configuration options and their defaults
-
-                -- `highlight` configures which highlight is used to display
-                -- trailing whitespace
-                highlight = 'DiffDelete',
-
-                -- `ignored_filetypes` configures which filetypes to ignore when
-                -- displaying trailing whitespace
-                ignored_filetypes = ignore.filetype,
-
-                -- `ignore_terminal` configures whether to ignore terminal buffers
-                ignore_terminal = true,
-            })
-
-            -- remove trailing whitespace with a keybinding
-            vim.keymap.set('n', '<Leader>w', require('whitespace-nvim').trim)
-        end
-    }
+    -- {
+    --     'Anemone95/whitespace.nvim',
+    --     event = "VeryLazy",
+    --     config = function()
+    --         require('whitespace-nvim').setup({
+    --             -- configuration options and their defaults
+    --
+    --             -- `highlight` configures which highlight is used to display
+    --             -- trailing whitespace
+    --             highlight = 'DiffDelete',
+    --
+    --             -- `ignored_filetypes` configures which filetypes to ignore when
+    --             -- displaying trailing whitespace
+    --             ignored_filetypes = ignore.filetype,
+    --             ignored_buffertypes =ignore.buftype,
+    --         })
+    --
+    --         -- remove trailing whitespace with a keybinding
+    --         vim.keymap.set('n', '<Leader>w', require('whitespace-nvim').trim)
+    --     end
+    -- }
 }
