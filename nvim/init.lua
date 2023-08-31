@@ -30,7 +30,9 @@ elseif not os.getenv("HOME") == '/Users' then
 end
 
 local is_ssh = os.getenv("SSH_CONNECTION") or os.getenv("SSH_CLIENT")
-if not is_ssh then
+if is_ssh then
+    vim.opt.cursorline = false
+else
     -- lazyvim 插件
     local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
     if not vim.loop.fs_stat(lazypath) then

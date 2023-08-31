@@ -13,7 +13,6 @@ fi
 
 if [ -z "$SSH_CONNECTION" ]; then
     if python3 -m venv --help > /dev/null 2>&1; then
-    then
         echo "'venv'(https://docs.python.org/3/library/venv.html) doesn't exist, please install it and try again."
         # exit 1
     fi
@@ -26,7 +25,6 @@ if [ -z "$SSH_CONNECTION" ]; then
 fi
 if [ -z "$SSH_CONNECTION" ]; then
     if python3 -m venv --help > /dev/null 2>&1; then
-    then
         if ! command -v pip3 &> /dev/null
         then
             if [[ $OS = "linux" ]]; then
