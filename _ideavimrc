@@ -1,3 +1,8 @@
+" support options key
+set macmeta
+" like key bindings
+source $HOME/.vimrc.base
+
 Plug 'preservim/nerdtree'
 Plug 'terryma/vim-multiple-cursors'
 set surround
@@ -108,9 +113,250 @@ vmap V <Action>(EditorUnSelectWord)
 
 set ideavimsupport=
 
-" support options key
-set macmeta
+set clipboard+=unnamed
 
-" like key bindings
-source $HOME/.vimrc.base
+source $HOME/.vimrc.unimap
 
+" Mathematical symbols mappings
+inoremap <expr> <M-1> "¬"
+inoremap <expr> <M-S-1> "±"
+inoremap <expr> <M-2> "∃"
+inoremap <expr> <M-S-2> "⇒"
+inoremap <expr> <M-3> "∀"
+inoremap <expr> <M-S-3> "↦"
+inoremap <expr> <M-4> "∪"
+inoremap <expr> <M-S-4> "∩"
+inoremap <expr> <M-5> "⊔"
+inoremap <expr> <M-S-5> "⨅"
+inoremap <expr> <M-6> "∨"
+inoremap <expr> <M-S-6> "∧"
+inoremap <expr> <M-7> "∅"
+inoremap <expr> <M-S-7> "→"
+inoremap <expr> <M-8> "∘"
+inoremap <expr> <M-S-8> "×"
+inoremap <expr> <M-9> "⊆"
+inoremap <expr> <M-S-9> "⊂"
+inoremap <expr> <M-0> "⊇"
+inoremap <expr> <M-S-0> "⊃"
+inoremap <expr> <M--> "∈"
+inoremap <expr> <M-S--> "⤳"
+inoremap <expr> <M-=> "≠"
+inoremap <expr> <M-S-=> "≈"
+
+inoremap <expr> <M-\> "⊥"
+inoremap <expr> <M-S-\> "⊤"
+inoremap <expr> <M-[> "⟦"
+inoremap <expr> <M-S-[> "⊑"
+inoremap <expr> <M-]> "⟧"
+inoremap <expr> <M-S-]> "⊒"
+
+inoremap <expr> <M-;> "⊏"
+inoremap <expr> <M-S-;> "⊐"
+
+
+inoremap <expr> <M-,> "≤"
+inoremap <expr> <M-S-,> "≪"
+inoremap <expr> <M-.> "≥"
+inoremap <expr> <M-S-.> "≫"
+inoremap <expr> <M-/> "÷"
+inoremap <expr> <M-S-/> "Σ"
+
+""Greek alphabet mappings
+inoremap <expr> <M-a> "α"
+inoremap <expr> <M-S-a> "Λ"
+inoremap <expr> <M-b> "β"
+inoremap <expr> <M-c> "χ"
+inoremap <expr> <M-d> "δ"
+inoremap <expr> <M-S-d> "Δ"
+inoremap <expr> <M-S-e> "ε"
+inoremap <expr> <M-f> "ϕ"
+inoremap <expr> <M-S-f> "Φ"
+inoremap <expr> <M-g> "γ"
+inoremap <expr> <M-S-g> "Γ"
+inoremap <expr> <M-h> "η"
+inoremap <expr> <C-i> "ι"
+inoremap <expr> <M-k> "κ"
+inoremap <expr> <M-S-l> "λ"
+inoremap <expr> <M-j> "Λ"
+inoremap <expr> <M-m> "μ"
+""niu
+inoremap <expr> <M-S-n> "ν"
+inoremap <expr> <M-o> "ο"
+inoremap <expr> <M-p> "π"
+inoremap <expr> <M-S-p> "Π"
+inoremap <expr> <M-q> "θ"
+inoremap <expr> <M-S-q> "Θ"
+inoremap <expr> <M-r> "ρ"
+inoremap <expr> <M-s> "σ"
+inoremap <expr> <M-t> "τ"
+""upsilon
+inoremap <expr> <M-S-u> "υ"
+inoremap <expr> <M-v> "ϒ"
+inoremap <expr> <M-S-v> "¥"
+inoremap <expr> <M-w> "ω"
+inoremap <expr> <M-S-w> "Ω"
+inoremap <expr> <M-x> "ξ"
+inoremap <expr> <M-S-x> "Ξ"
+inoremap <expr> <M-y> "ψ"
+inoremap <expr> <M-S-y> "Ψ"
+inoremap <expr> <M-z> "ζ"
+
+set langmenu=none
+" iMproved, required
+set nocompatible
+
+" Desc: tab
+set smarttab
+" TAB 切换为空格
+set expandtab
+" tab=4 个空格
+set tabstop=4
+" 根据前方代码判断缩进
+set cindent shiftwidth=4 " set cindent on to autoinent when editing c/c++ file, with 4 shift width
+" 特定参数改变缩进行为, see help cinoptions-values for more details
+set cinoptions=>s,e0,n0,f0,{0,}0,^0,:0,=s,l0,b0,g0,hs,ps,ts,is,+s,c3,C0,0,(0,us,U0,w0,W0,m0,j0,)20,*30
+
+" Desc: 缩进
+" shift 四舍五入到tab 的倍数
+set shiftround
+" 下一行复制上一行缩进
+set autoindent
+" {} 开始时添加缩进
+set smartindent
+
+"
+" 相对行号
+set relativenumber
+" 显式当前行号
+set nu
+" 自动换行
+set wrap
+
+" 搜索
+set showmatch " show matching paren
+set incsearch " do incremental searching
+set hlsearch " highlight search terms
+set ignorecase " set search/replace pattern to ignore case
+set smartcase " set smartcase mode on, If there is upper case character in the search patern, the 'ignorecase' option will be override.
+
+" 剪切板
+set clipboard+=unnamed,unnamedplus
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+" 指定按一次backspace就删除shiftwidth宽度
+set smarttab
+
+" 补全时即使有一个写显式菜单，不自动选第一个
+set completeopt=menuone,noselect
+
+" 保留5行
+set scrolloff=10
+
+" 关闭系统警告声
+set noeb
+" 通过闪烁代替警告
+set vb
+
+" 任意时刻使用鼠标
+set mouse=a
+
+" in visual block mode, cursor can be positioned where there is no actual character
+set ve=block
+
+" 解释所有数字为十进制
+set nf=
+
+" enable complete in command mode
+set wildmenu
+set showcmd
+set cmdheight=1
+
+" show the cursor position all the time
+set ruler
+
+" shortens messages to avoid 'press a key' prompt
+set shortmess=aoOtTI
+
+" do not redraw while executing macros (much faster)
+set lazyredraw
+
+" for easy browse last line with wrap text
+set display+=lastline
+
+" always have status-line
+set laststatus=2
+
+" allow to change buffer without saving
+set hidden
+
+" 当文件在外部被修改，自动更新该文件
+set autoread
+
+" make sure our terminal use 256 color
+set termguicolors
+set t_Co=256
+
+" File encoding
+set encoding=utf-8                                    " 设置gvim内部编码，默认不更改
+set fileencodings=utf-8,ucs-bom,gbk,cp936,latin-1     "设置支持打开的文件的编码
+
+" 默认在右边/下边打开新窗口
+set splitright
+set splitbelow
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+" 0 second to show the matching parent ( much faster )
+set matchtime=0
+
+" no autochchdir
+set noacd
+
+" 当前行高亮
+set cursorline
+
+" mapper
+let mapleader ="\\"
+
+" 增强剪切板
+map <leader>y "*y
+vmap <leader>y "*y
+map <leader>p "*p
+
+" w为选择到这个单词结尾
+nmap w e
+
+" 缩进后保持v mode
+vmap < <gv
+vmap > >gv
+
+" 全选
+nmap <c-a> ggVG<CR>
+
+" 保存
+cmap W w
+cmap ww w !sudo tee %
+" 全选
+map <C-a> ggVG
+
+" paste 后不替换
+vmap p "_dhp
+
+nmap gp '.
+
+nmap <c-k> <c-w>k
+nmap <c-j> <c-w>j
+nmap <c-h> <c-w>h
+nmap <c-l> <c-w>l
+
+noremap <Up> <c-w>k
+noremap <Down> <c-w>j
+noremap <Left> <c-w>h
+noremap <Right> <c-w>l
+
+if has('multi_byte_ime')
+    hi Cursor guifg=bg guibg=White gui=NONE
+    hi CursorIM guifg=NONE guibg=Skyblue gui=NONE
+    set iminsert=0 imsearch=0
+endif

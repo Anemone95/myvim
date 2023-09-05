@@ -1,4 +1,3 @@
-scriptencoding utf-8
 set langmenu=none
 " iMproved, required
 set nocompatible
@@ -38,7 +37,7 @@ set ignorecase " set search/replace pattern to ignore case
 set smartcase " set smartcase mode on, If there is upper case character in the search patern, the 'ignorecase' option will be override.
 
 " 剪切板
-set clipboard=unnamed,unnamedplus
+set clipboard+=unnamed,unnamedplus
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 " 指定按一次backspace就删除shiftwidth宽度
