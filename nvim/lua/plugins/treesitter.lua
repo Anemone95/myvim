@@ -28,6 +28,7 @@ return {
         opts = {
             ensure_installed = {
                 "arduino",
+                -- "agda",
                 "bibtex",
                 "bash",
                 "c",

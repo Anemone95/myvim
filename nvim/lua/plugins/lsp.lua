@@ -1,4 +1,4 @@
-local lang2server = {
+local cmd2server = {
     clang = {
         clangd = {},
     },
@@ -171,7 +171,7 @@ return {
 
             end
 
-            for lang, _servers in pairs(lang2server) do
+            for lang, _servers in pairs(cmd2server) do
                 if command_exists(lang) then
                     for k,v in pairs(_servers) do
                         servers[k] = v

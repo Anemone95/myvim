@@ -60,6 +60,6 @@ end
 
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
-    vim.keymap.set('c', '<D-v>', '<C-r>+', { noremap = true })
-    vim.keymap.set('i', '<D-v>', '<Cmd>put +<CR>', {})
 end
+vim.keymap.set('c', '<D-v>', '<C-r>+', { noremap = true })
+vim.keymap.set('i', '<D-v>', '<Cmd>put +<CR>', {})

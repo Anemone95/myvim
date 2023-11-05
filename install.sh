@@ -81,6 +81,7 @@ then
         sudo update-alternatives --config vim
         sudo update-alternatives --install /usr/bin/editor editor /snap/nvim/current/usr/bin/nvim 160
         sudo update-alternatives --config editor
+        sudo apt update
         sudo apt install fzf ripgrep build-essential -y
     elif [[ $OS = "OSX" ]]; then
         brew install neovim fzf ripgrep

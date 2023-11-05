@@ -4,6 +4,7 @@ local ret = {
         "folke/tokyonight.nvim",
         config = function()
             vim.cmd [[colorscheme tokyonight-storm]]
+            vim.cmd [[highlight Visual guibg=darkblue ctermbg=darkblue]]
         end
     },
     -- 状态栏
@@ -184,6 +185,7 @@ if vim.g.neovide then
         {
             "folke/noice.nvim",
             event = "VeryLazy",
+            config = false,
             opts = {
                 lsp = {
                     progress = {
@@ -255,6 +257,12 @@ if vim.g.neovide then
                         },
                         view = "mini",
                     },
+                },
+                presets = {
+                    bottom_search = true, -- use a classic bottom cmdline for search
+                    long_message_to_split = true, -- long messages will be sent to a split
+                    inc_rename = false, -- enables an input dialog for inc-rename.nvim
+                    lsp_doc_border = false, -- add a border to hover docs and signature help
                 },
             },
             dependencies = {

@@ -129,16 +129,15 @@ vmap < <gv
 vmap > >gv
 
 " 全选
-nmap <c-a> ggVG<CR>
+nmap <C-a> ggVG
+nmap <D-a> ggVG<CR>
 
 " 保存
 cmap W w
 cmap ww w !sudo tee %
-" 全选
-map <C-a> ggVG
 
 " paste 后不替换
-vmap p "_dhp
+vmap p "_dP
 
 nmap gp '.
 

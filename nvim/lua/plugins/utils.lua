@@ -12,6 +12,6 @@ return {
     },
     {
         "folke/which-key.nvim",
-        config = false,
+        config = true,
     },
 }
