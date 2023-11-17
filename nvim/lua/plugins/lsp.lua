@@ -75,14 +75,17 @@ local servers = {
 
 local function jump_to_next_diagnostic()
     local current_bufnr = vim.api.nvim_get_current_buf()
-    local next_diagnostic = vim.lsp.diagnostic.get_next(current_bufnr, nil, { severity_min = vim.lsp.protocol.DiagnosticSeverity.Warning })
+    local next_diagnostic = vim.lsp.diagnostic.get_next(current_bufnr, nil,
+        { severity_min = vim.lsp.protocol.DiagnosticSeverity.Warning })
 
     if not next_diagnostic then
-        next_diagnostic = vim.lsp.diagnostic.get_next(current_bufnr, nil, { severity_min = vim.lsp.protocol.DiagnosticSeverity.Error })
+        next_diagnostic = vim.lsp.diagnostic.get_next(current_bufnr, nil,
+            { severity_min = vim.lsp.protocol.DiagnosticSeverity.Error })
     end
 
     if next_diagnostic then
-        vim.api.nvim_win_set_cursor(0, { next_diagnostic.range.start.line + 1, next_diagnostic.range.start.character + 1 })
+        vim.api.nvim_win_set_cursor(0,
+            { next_diagnostic.range.start.line + 1, next_diagnostic.range.start.character + 1 })
     else
         print("No more warnings or errors.")
     end
@@ -155,7 +158,7 @@ return {
                     vim.lsp.buf.format { async = true }
                 end, { desc = "[F]ormat code" })
                 nmap('K', "<cmd>Lspsaga hover_doc<CR>", 'Hover Documentation')
-                nmap'cmp_nvim_lsp'('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+                nmap 'cmp_nvim_lsp' ('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
                 nmap('gd', require "telescope.builtin".lsp_definitions, '[G]oto [D]efinition')
                 -- nmap('gi', require "telescope.builtin".lsp_implementations, '[G]oto [I]mplementation')
                 nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
@@ -168,12 +171,11 @@ return {
                 nmap('<leader>ca', "<cmd>Lspsaga code_action<CR>", '[C]ode [A]ction')
                 nmap('<leader>da', require "telescope.builtin".diagnostics, '[D]i[A]gnostics')
                 -- nmap('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
-
             end
 
             for lang, _servers in pairs(cmd2server) do
                 if command_exists(lang) then
-                    for k,v in pairs(_servers) do
+                    for k, v in pairs(_servers) do
                         servers[k] = v
                     end
                 end
@@ -201,15 +203,15 @@ return {
             vim.opt.updatetime = 500
             -- FIXME: not very useful
             -- vim.api.nvim_create_autocmd(
-                -- "CursorHold",
-                -- {
-                    -- pattern = {"*"},
-                    -- callback = function()
-                        -- if not require("cmp").visible() then
-                            -- local status, err = pcall(function() vim.lsp.buf.hover({focusable=false}) end)
-                        -- end
-                    -- end
-                -- }
+            -- "CursorHold",
+            -- {
+            -- pattern = {"*"},
+            -- callback = function()
+            -- if not require("cmp").visible() then
+            -- local status, err = pcall(function() vim.lsp.buf.hover({focusable=false}) end)
+            -- end
+            -- end
+            -- }
             -- )
         end
     },

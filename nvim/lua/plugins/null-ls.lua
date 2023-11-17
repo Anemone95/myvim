@@ -4,7 +4,7 @@ return {
     dependencies = {
         "jay-babu/mason-null-ls.nvim"
     },
-    config = function ()
+    config = function()
         local tools = {
             "black",
         }
