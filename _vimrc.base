@@ -137,7 +137,31 @@ cmap W w
 cmap ww w !sudo tee %
 
 " paste 后不替换
-vmap p "_dP
+nnoremap <leader>d "_d
+function! Paste()
+    " " 保存原始光标位置
+    " let save_cursor = getpos(".")
+
+    " 获取剪贴板内容
+    let clipboard_content = getreg('"')
+
+    " 检查内容是否以换行符结束
+    if clipboard_content[-1] == "\n"
+        " 如果是，执行 "_dp
+        execute 'normal! gv"_d'
+        execute 'normal! P'
+    else
+        " 如果不是，执行 "_dP
+        execute 'normal! gv"_dh'
+        execute 'normal! p'
+    endif
+    "
+    " " 恢复原始光标位置
+    " call setpos('.', save_cursor)
+endfunction
+
+" 将 p 键映射到这个函数
+vnoremap p :call Paste()<CR>
 
 nmap gp '.
 

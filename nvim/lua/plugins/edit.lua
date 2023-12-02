@@ -69,47 +69,6 @@ return {
     },
     -- 目录树
     {
-        "nvim-neo-tree/neo-tree.nvim",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-            "MunifTanjim/nui.nvim",
-        },
-        config = function()
-            vim.keymap.set({ "n", "v" }, "<F2>", [[<cmd>Neotree toggle<CR>]])
-            require("neo-tree").setup({
-                window = {
-                    position = "left",
-                    width = 35,
-                },
-                open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "Outline" },
-                sources = { "filesystem", "buffers", "git_status", "document_symbols" },
-                filesystem = {
-                    bind_to_cwd = false,
-                    follow_current_file = { enabled = true },
-                    use_libuv_file_watcher = true,
-                },
-                default_component_configs = {
-                    git_status = {
-                        symbols = {
-                            -- Change type
-                            added     = "", -- or , but this is redundant info if you use git_status_colors on the name
-                            modified  = "", -- or "", but this is redundant info if you use git_status_colors on the name
-                            deleted   = "✖", -- this can only be used in the git_status source
-                            renamed   = "󰁕", -- this can only be used in the git_status source
-                            -- Status type
-                            untracked = "",
-                            ignored   = "",
-                            unstaged  = "✚",
-                            staged    = "",
-                            conflict  = "",
-                        }
-                    },
-                }
-            })
-        end
-    },
-    {
         "numToStr/Comment.nvim",
         config = function()
             require('Comment').setup({
@@ -163,27 +122,5 @@ return {
                 end
             )
         end
-    },
-    -- 末尾去空格
-    -- {
-    --     'Anemone95/whitespace.nvim',
-    --     event = "VeryLazy",
-    --     config = function()
-    --         require('whitespace-nvim').setup({
-    --             -- configuration options and their defaults
-    --
-    --             -- `highlight` configures which highlight is used to display
-    --             -- trailing whitespace
-    --             highlight = 'DiffDelete',
-    --
-    --             -- `ignored_filetypes` configures which filetypes to ignore when
-    --             -- displaying trailing whitespace
-    --             ignored_filetypes = ignore.filetype,
-    --             ignored_buffertypes =ignore.buftype,
-    --         })
-    --
-    --         -- remove trailing whitespace with a keybinding
-    --         vim.keymap.set('n', '<Leader>w', require('whitespace-nvim').trim)
-    --     end
-    -- }
+    }
 }

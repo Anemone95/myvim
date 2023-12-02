@@ -2,15 +2,8 @@ local cmd2server = {
     clang = {
         clangd = {},
     },
-    venv = {
-        pyright = {},
-        jedi_language_server = {}
-    },
     cargo = {
         neocmake = {},
-    },
-    tsc = {
-        tsserver = {},
     },
     opam = {
         ocamllsp = {},
@@ -54,7 +47,6 @@ local servers = {
     -- gopls = {},
     html = {},
     jsonls = {},
-    jdtls = {},
     lua_ls = {
         Lua = {
             workspace = { checkThirdParty = false },
@@ -71,7 +63,11 @@ local servers = {
     vimls = {},
     volar = {},
     yamlls = {},
+    tsserver = {},             -- need tsc
+    java_language_server = {}, -- brew install maven protobuf
+    jedi_language_server = {}, -- need venv on linux
 }
+
 
 local function jump_to_next_diagnostic()
     local current_bufnr = vim.api.nvim_get_current_buf()
@@ -121,6 +117,8 @@ local function goToImplementationOrDefinition()
 end
 
 
+
+
 return {
     {
         "neovim/nvim-lspconfig",
@@ -151,6 +149,8 @@ return {
                     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
                 end
                 nmap("gq", vim.diagnostic.goto_next, "[G]oto next diagnostic")
+                nmap("gf", vim.lsp.buf.code_action, "[G]et [F]ix suggestion")
+                nmap("<D-CR>", vim.lsp.buf.code_action, "[G]et [F]ix suggestion")
                 nmap('gi', goToImplementationOrDefinition, '[G]oto [I]mplementation')
                 nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
                 nmap('<leader>rn', "<cmd>Lspsaga rename ++project<cr>", '[R]e[n]ame')
@@ -181,6 +181,17 @@ return {
                 end
             end
 
+            local ori_java_home = os.getenv("JAVA_HOME")
+            local java_13_home = os.getenv("JAVA_13_HOME")
+
+            -- Check if java_21_home is empty
+            if not java_13_home or java_13_home == "" then
+                -- Use Neovim's standard error function to report the error
+                vim.notify("Error: JAVA_13_HOME environment variable is not set.", "error")
+            end
+
+            os.execute("export JAVA_HOME=" .. java_13_home)
+
             require("neoconf").setup()
             require("neodev").setup()
             require("fidget").setup()
@@ -188,7 +199,7 @@ return {
             require("mason").setup()
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
             require("mason-lspconfig").setup({
-                automatic_installation = false,
+                automatic_installation = true,
                 ensure_installed = vim.tbl_keys(servers),
                 handlers = {
                     function(server_name) -- default handler (optional)
@@ -201,6 +212,7 @@ return {
                 }
             })
             vim.opt.updatetime = 500
+            os.execute("export JAVA_HOME=" .. ori_java_home)
             -- FIXME: not very useful
             -- vim.api.nvim_create_autocmd(
             -- "CursorHold",

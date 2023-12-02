@@ -7,7 +7,7 @@ vim.opt.exrc = true
 
 -- 允许 options map
 vim.g.neovide_input_macos_alt_is_meta = true
-vim.keymap.set("n", "bn", "<cmd>bNext<CR>")
+vim.keymap.set("n", "bn", "<cmd>bnext<CR>")
 vim.keymap.set("n", "bp", "<cmd>bprevious<CR>")
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -28,6 +28,16 @@ if os.getenv("OS") == "Windows_NT" then
 elseif not os.getenv("HOME") == '/Users' then
     vim.opt.guifontwide = "WenQuanYi Micro Hei 11"
 end
+
+-- 设置 netrw
+vim.g.netrw_banner = 0        -- 关闭启动时的横幅信息
+vim.g.netrw_liststyle = 3     -- 设置文件列表风格，3 为树状视图
+vim.g.netrw_browse_split = 4  -- 在新标签页中打开选择的文件
+vim.g.netrw_altv = 1          -- 在垂直分割窗口中打开文件
+vim.g.netrw_winsize = 20      -- 设置 netrw 窗口的宽度百分比
+vim.g.netrw_list_hide = '.*\\~$,\\~$,\\~\\~$'
+vim.g.netrw_sort_sequence = '[\\/],$,*'
+
 
 local is_ssh = os.getenv("SSH_CONNECTION") or os.getenv("SSH_CLIENT")
 if is_ssh then
@@ -56,12 +66,10 @@ else
     require("lazy").setup("plugins", opts)
 end
 
-
-
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
 end
--- vim.keymap.set('c', '<C-v>', '<C-v>', { noremap = true })
--- vim.keymap.set('v', '<C-v>', '<C-v>', { noremap = true })
+
+-- 粘贴 
 vim.keymap.set('c', '<D-v>', '<C-r>+', { noremap = true })
 vim.keymap.set('i', '<D-v>', '<Cmd>put +<CR>', {})

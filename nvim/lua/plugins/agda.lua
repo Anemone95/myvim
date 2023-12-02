@@ -1,19 +1,4 @@
 return {
-    -- {
-    --     "ashinkarov/agda.nvim",
-    --     dependencies = {
-    --         "nvim-lua/plenary.nvim",
-    --
-    --     },
-    --     config = function ()
-    --     end,
-    --     -- ft = { 'agda' },
-    -- },
-    -- {
-    --     "derekelkins/agda-vim",
-    --     config = function ()
-    --     end
-    -- }
     {
         'isovector/cornelis',
         dependencies = {
