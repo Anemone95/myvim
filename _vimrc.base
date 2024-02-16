@@ -152,8 +152,8 @@ function! Paste()
         execute 'normal! P'
     else
         " 如果不是，执行 "_dP
-        execute 'normal! gv"_dh'
-        execute 'normal! p'
+        execute 'normal! gv"_d'
+        execute 'normal! P'
     endif
     "
     " " 恢复原始光标位置

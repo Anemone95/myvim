@@ -341,9 +341,7 @@ cmap ww w !sudo tee %
 map <C-a> ggVG
 
 " paste 后不替换
-vmap p "_dhp
-
-nmap gp '.
+vmap p "_dP
 
 nmap <c-k> <c-w>k
 nmap <c-j> <c-w>j

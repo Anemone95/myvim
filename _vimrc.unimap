@@ -55,7 +55,9 @@ inoremap <expr> <M-S-f> "Φ"
 inoremap <expr> <M-g> "γ"
 inoremap <expr> <M-S-g> "Γ"
 inoremap <expr> <M-h> "η"
+"inoremap <expr> <C-i> "ι" // conflit with TAB
 inoremap <expr> <C-i> "ι"
+inoremap <Tab> <Tab>
 inoremap <expr> <M-k> "κ"
 inoremap <expr> <M-S-l> "λ"
 inoremap <expr> <M-j> "Λ"
