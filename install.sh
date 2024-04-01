@@ -92,5 +92,6 @@ fi
 if [ -z "$SSH_CONNECTION" ]; then
     git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git $GIT_DIR/fonts
     bash ./fonts/install.sh Hack
+    rm -rf $GIT_DIR/fonts
 fi
 
