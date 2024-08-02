@@ -37,8 +37,10 @@ nmap bp <action>(PreviousTab)
 
 " 搜索
 nmap <leader>ff <action>(SearchEverywhere)
+nmap ff <action>(SearchEverywhere)
 nmap <leader>fe <action>(FindInPath)
-nmap <leader>fr <action>(RecentChangedFiles)
+nmap fe <action>(FindInPath)
+nmap fr <action>(RecentChangedFiles)
 nmap <leader>gr <action>(RecentChangedFiles)
 nmap <leader>s <action>(FileStructurePopup)
 " noremap \fp <action>(FindInPath)

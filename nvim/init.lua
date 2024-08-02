@@ -6,7 +6,7 @@ vim.opt.undodir = '/tmp/nvim/undo'
 vim.opt.exrc = true
 
 -- 允许 options map
-vim.g.neovide_input_macos_alt_is_meta = true
+vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
 vim.keymap.set("n", "bn", "<cmd>bnext<CR>")
 vim.keymap.set("n", "bp", "<cmd>bprevious<CR>")
 
