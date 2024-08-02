@@ -168,7 +168,7 @@ local ret = {
                 close_on_exit = true,
                 open_mapping = "<c-\\>",
             })
-            vim.keymap.set({ "n", "t" }, "<F3>", "<cmd>ToggleTerm<CR>", { desc = { "toggle terminal" } })
+            vim.keymap.set({ "n", "t" }, "<F3>", "<cmd>ToggleTerm<CR>", { desc = "toggle terminal" })
             function _G.set_terminal_keymaps()
                 local opts = { buffer = 0 }
                 vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
