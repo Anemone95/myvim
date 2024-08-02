@@ -42,6 +42,7 @@ vim.g.netrw_sort_sequence = '[\\/],$,*'
 local is_ssh = os.getenv("SSH_CONNECTION") or os.getenv("SSH_CLIENT")
 if is_ssh then
     vim.opt.cursorline = false
+    vim.o.mouse = ""
 else
     -- lazyvim 插件
     local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
