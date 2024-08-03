@@ -158,7 +158,7 @@ return {
                     vim.lsp.buf.format { async = true }
                 end, { desc = "[F]ormat code" })
                 nmap('K', "<cmd>Lspsaga hover_doc<CR>", 'Hover Documentation')
-                nmap 'cmp_nvim_lsp' ('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+                nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
                 nmap('gd', require "telescope.builtin".lsp_definitions, '[G]oto [D]efinition')
                 -- nmap('gi', require "telescope.builtin".lsp_implementations, '[G]oto [I]mplementation')
                 nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
