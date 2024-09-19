@@ -193,6 +193,7 @@ else
                         bind_to_cwd = false,
                         follow_current_file = { enabled = true },
                         use_libuv_file_watcher = true,
+                        visible = true,
                     },
                     default_component_configs = {
                         git_status = {
