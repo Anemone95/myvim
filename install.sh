@@ -30,7 +30,20 @@ ln -s -f $GIT_DIR/_ideavimrc ~/.ideavimrc
 
 # if in docker then return
 if [ -e /sys/fs/cgroup/memory.max ] || [ -e /sys/fs/cgroup/memory/memory.limit_in_bytes ]; then
-    exit
+    exit 0
+fi
+
+if [ -e /.dockerenv ]; then
+    exit 0
+fi
+
+if grep -qa docker /proc/self/cgroup; then
+    exit 0
+fi
+
+if [ "$BASIC_VIM_CONFIG" = "1" ]; then
+    echo "Install basic vim config"
+    exit 0
 fi
 
 if [ -z "$SSH_CONNECTION" ]; then
