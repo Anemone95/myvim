@@ -43,6 +43,50 @@ local is_ssh = os.getenv("SSH_CONNECTION") or os.getenv("SSH_CLIENT")
 if is_ssh then
     vim.opt.cursorline = false
     vim.o.mouse = ""
+elseif vim.g.vscode then
+    local vscode = require('vscode')
+    -- using 'open default keyboard shortcuts' to see the command list
+    vim.keymap.set({ "n" }, "mm", function () vscode.action("bookmarks.toggle") end , { noremap = true })
+    vim.keymap.set({ "n" }, "mp", function () vscode.action("bookmarks.jumpToPrevious") end, { noremap = true })
+    vim.keymap.set({ "n" }, "mn", function () vscode.action("bookmarks.jumpToNext") end, { noremap = true })
+
+    vim.keymap.set({ "n"}, "<F9>", function () vscode.action("workbench.action.tasks.runTask") end )
+    vim.keymap.set({ "n"}, "<F10>", function () vscode.action("workbench.action.debug.start") end)
+
+    vim.keymap.set({ "n" }, "bn", "<Cmd>Tabnext<CR>", { noremap = true })
+    vim.keymap.set({ "n" }, "bp", "<Cmd>Tabprevious<CR>", { noremap = true })
+
+    vim.keymap.set({ "n" }, "<leader>ff", function () vscode.action("workbench.action.quickOpen") end, { noremap = true })
+    vim.keymap.set({ "n" }, "ff", function() vscode.action("workbench.action.quickOpen") end, { noremap = true })
+
+    vim.keymap.set({ "n" }, "<leader>fe", function () vscode.action("workbench.action.findInFiles") end, { noremap = true })
+    vim.keymap.set({ "n" }, "fe", function() vscode.action("workbench.action.findInFiles") end, { noremap = true })
+    
+    vim.keymap.set({ "n" }, "<leader>fr", function () vscode.action("workbench.action.openRecent") end, { noremap = true })
+    vim.keymap.set({ "n" }, "fr", function() vscode.action("workbench.action.openRecent") end, { noremap = true })
+
+    vim.keymap.set({ "n" }, "<space>", function() vscode.action("editor.toggleFold") end, { noremap = true })
+    vim.keymap.set({ "n" }, "zo", function() vscode.action("editor.unfold") end, { noremap = true })
+    vim.keymap.set({ "n" }, "zz", function() vscode.action("editor.fold") end, { noremap = true })
+    vim.keymap.set({ "n" }, "za", function() vscode.action("editor.foldAll") end, { noremap = true })
+
+    vim.keymap.set({'n'}, '=', function() vscode.action("editor.action.formatDocument") end, { noremap = true })
+
+    vim.keymap.set({'n','i','v'}, '<leader>ci', function() vscode.action("editor.action.commentLine") end, { noremap = true })
+    -- TODO 多行编辑
+
+    vim.keymap.set({ "n", "x" }, "<leader>rn", function()
+        vscode.with_insert(function()
+            vscode.action("editor.action.rename")
+        end)
+    end)
+
+    vim.keymap.set({'n'}, 'gi', function() vscode.action("editor.action.goToImplementation") end, { noremap = true })
+    vim.keymap.set({'n'}, 'go', function() vscode.action("workbench.action.navigateBack") end, { noremap = true })
+    vim.keymap.set({'n'}, 'gd', function() vscode.action("editor.action.revealDefinition") end, { noremap = true })
+    vim.keymap.set({'n'}, 'gp', function() vscode.action("workbench.action.navigateToLastEditLocation") end, { noremap = true })
+    vim.keymap.set({'n'}, 'gn', function() vscode.action("workbench.action.navigateForwardInEditLocations") end, { noremap = true })
+    vim.keymap.set({'n'}, 'gq', function() vscode.action("editor.action.marker.nextInFiles") end, { noremap = true })
 else
     -- lazyvim 插件
     local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -71,6 +115,8 @@ if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
 end
 
--- 粘贴 
 vim.keymap.set('c', '<D-v>', '<C-r>+', { noremap = true })
 vim.keymap.set('i', '<D-v>', '<Cmd>put +<CR>', {})
+
+vim.keymap.set({ "n" }, "bn", "<Cmd>Tabnext<CR>", { noremap = true })
+vim.keymap.set({ "n" }, "bp", "<Cmd>Tabprevious<CR>", { noremap = true })
