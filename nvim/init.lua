@@ -87,6 +87,11 @@ elseif vim.g.vscode then
     vim.keymap.set({'n'}, 'gp', function() vscode.action("workbench.action.navigateToLastEditLocation") end, { noremap = true })
     vim.keymap.set({'n'}, 'gn', function() vscode.action("workbench.action.navigateForwardInEditLocations") end, { noremap = true })
     vim.keymap.set({'n'}, 'gq', function() vscode.action("editor.action.marker.nextInFiles") end, { noremap = true })
+    vim.keymap.set({'n','x'}, '<Right>', function() vscode.action("workbench.action.navigateRight") end, { noremap = true })
+    vim.keymap.set({'n','x'}, '<Left>', function() vscode.action("workbench.action.navigateLeft") end, { noremap = true })
+    vim.keymap.set({'n','x'}, '<Up>', function() vscode.action("workbench.action.navigateUp") end, { noremap = true })
+    vim.keymap.set({'n','x'}, '<Down>', function() vscode.action("workbench.action.navigateDown") end, { noremap = true })
+    vim.keymap.set({'n','v'}, 'v', function() vscode.action("editor.action.smartSelect.expand") end, { noremap = true })
 else
     -- lazyvim 插件
     local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
