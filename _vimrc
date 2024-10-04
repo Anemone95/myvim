@@ -7,6 +7,8 @@ nnoremap zz zc
 nnoremap za zM
 
 " support options key
-set macmeta
+if has("mac") || has("macunix")
+    set macmeta
+endif
 
 source $HOME/.vimrc.unimap
