@@ -59,7 +59,7 @@ elseif vim.g.vscode then
     vim.keymap.set({ "n" }, "<leader>ff", function () vscode.action("workbench.action.quickOpen") end, { noremap = true })
     vim.keymap.set({ "n" }, "ff", function() vscode.action("workbench.action.quickOpen") end, { noremap = true })
 
-    vim.keymap.set({ "n" }, "<leader>fe", function () vscode.action("workbench.action.findInFiles") end, { noremap = true })
+    vim.keymap.set({ "n" }, "<leader>fe", function () vscode.action("workbench.action.showAllSymbols") end, { noremap = true })
     vim.keymap.set({ "n" }, "fe", function() vscode.action("workbench.action.findInFiles") end, { noremap = true })
     
     vim.keymap.set({ "n" }, "<leader>fr", function () vscode.action("workbench.action.openRecent") end, { noremap = true })
@@ -89,9 +89,14 @@ elseif vim.g.vscode then
     vim.keymap.set({'n'}, 'gq', function() vscode.action("editor.action.marker.nextInFiles") end, { noremap = true })
     vim.keymap.set({'n','x'}, '<Right>', function() vscode.action("workbench.action.navigateRight") end, { noremap = true })
     vim.keymap.set({'n','x'}, '<Left>', function() vscode.action("workbench.action.navigateLeft") end, { noremap = true })
-    vim.keymap.set({'n','x'}, '<Up>', function() vscode.action("workbench.action.navigateUp") end, { noremap = true })
-    vim.keymap.set({'n','x'}, '<Down>', function() vscode.action("workbench.action.navigateDown") end, { noremap = true })
-    vim.keymap.set({'n','v'}, 'v', function() vscode.action("editor.action.smartSelect.expand") end, { noremap = true })
+    -- vim.keymap.set({'n','x'}, '<Up>', function() vscode.action("workbench.action.navigateUp") end, { noremap = true })
+    -- vim.keymap.set({'n','x'}, '<Down>', function() vscode.action("workbench.action.navigateDown") end, { noremap = true })
+    vim.keymap.set({'v'}, 'v', function() vscode.action("editor.action.smartSelect.expand") end, { noremap = true })
+    -- config in vscode might be better?
+    vim.keymap.set({'n'}, '<F9>', function() vscode.action("workbench.action.debug.run") end, { noremap = true })
+    vim.keymap.set({'n'}, '<F10>', function() vscode.action("workbench.action.debug.start") end, { noremap = true })
+    vim.keymap.set({'n'}, '<F2>', function() vscode.action("workbench.action.toggleSidebarVisibility") end, { noremap = true })
+    vim.keymap.set({'n'}, '<F3>', function() vscode.action("workbench.action.terminal.toggleTerminal") end, { noremap = true })
 else
     -- lazyvim 插件
     local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -122,6 +127,3 @@ end
 
 vim.keymap.set('c', '<D-v>', '<C-r>+', { noremap = true })
 vim.keymap.set('i', '<D-v>', '<Cmd>put +<CR>', {})
-
-vim.keymap.set({ "n" }, "bn", "<Cmd>Tabnext<CR>", { noremap = true })
-vim.keymap.set({ "n" }, "bp", "<Cmd>Tabprevious<CR>", { noremap = true })

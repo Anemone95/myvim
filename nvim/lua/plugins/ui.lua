@@ -191,6 +191,10 @@ if vim.g.neovide then
             "folke/noice.nvim",
             event = "VeryLazy",
             config = false,
+            keys = {
+                { "<leader>nn", function() require("noice").cmd("dismiss") end, desc = "Dismiss All" },
+                { "<leader>ns", function() require("noice").cmd("history") end, desc = "Noice History" },
+            },
             opts = {
                 lsp = {
                     progress = {
@@ -234,7 +238,7 @@ if vim.g.neovide then
                     message = {
                         -- Messages shown by lsp servers
                         enabled = true,
-                        view = "notify",
+                        view = nil,
                         opts = {},
                     },
                     -- defaults for hover and signature help
@@ -280,6 +284,7 @@ if vim.g.neovide then
             }
         }
     )
+    
 end
 
 
