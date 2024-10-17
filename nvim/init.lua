@@ -56,10 +56,10 @@ elseif vim.g.vscode then
     vim.keymap.set({ "n" }, "bn", "<Cmd>Tabnext<CR>", { noremap = true })
     vim.keymap.set({ "n" }, "bp", "<Cmd>Tabprevious<CR>", { noremap = true })
 
-    vim.keymap.set({ "n" }, "<leader>ff", function () vscode.action("workbench.action.quickOpen") end, { noremap = true })
-    vim.keymap.set({ "n" }, "ff", function() vscode.action("workbench.action.quickOpen") end, { noremap = true })
+    vim.keymap.set({ "n" }, "<leader>fe", function () vscode.action("workbench.action.findInFiles") end, { noremap = true })
+    vim.keymap.set({ "n" }, "fe", function() vscode.action("workbench.action.findInFiles") end, { noremap = true })
 
-    vim.keymap.set({ "n" }, "<leader>fe", function () vscode.action("workbench.action.showAllSymbols") end, { noremap = true })
+    vim.keymap.set({ "n" }, "<leader>ff", function () vscode.action("workbench.action.showAllSymbols") end, { noremap = true })
     vim.keymap.set({ "n" }, "fe", function() vscode.action("workbench.action.findInFiles") end, { noremap = true })
     
     vim.keymap.set({ "n" }, "<leader>fr", function () vscode.action("workbench.action.openRecent") end, { noremap = true })

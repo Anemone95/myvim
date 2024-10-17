@@ -111,7 +111,9 @@ set matchtime=0
 set noacd
 
 " 当前行高亮
-set cursorline
+if has('gui_running') || (empty($SSH_CLIENT) && empty($SSH_TTY))
+    set cursorline
+endif
 
 " mapper
 let mapleader ="\\"
