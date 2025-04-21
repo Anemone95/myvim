@@ -42,7 +42,7 @@ nmap <leader>fe <action>(FindInPath)
 nmap fe <action>(FindInPath)
 nmap fr <action>(RecentChangedFiles)
 nmap <leader>gr <action>(RecentChangedFiles)
-nmap <leader>s <action>(FileStructurePopup)
+nmap <leader>st <action>(FileStructurePopup)
 " noremap \fp <action>(FindInPath)
 " noremap \ff <action>(GotoFile)
 " noremap \fc <action>(GotoClass)
@@ -360,3 +360,8 @@ if has('multi_byte_ime')
     hi CursorIM guifg=NONE guibg=Skyblue gui=NONE
     set iminsert=0 imsearch=0
 endif
+
+imap <leader><Esc> \\<Esc><Esc>
+nmap <leader>vs <Action>(MoveTabRight)
+nmap <leader>sp <Action>(MoveTabDown)
+nmap <leader>m <Action>(MoveEditorToOppositeTabGroup)

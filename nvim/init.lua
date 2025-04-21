@@ -39,6 +39,23 @@ vim.g.netrw_list_hide = '.*\\~$,\\~$,\\~\\~$'
 vim.g.netrw_sort_sequence = '[\\/],$,*'
 
 
+local function load_lazy()
+    -- lazyvim 插件
+    local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+    if not vim.loop.fs_stat(lazypath) then
+        vim.fn.system({
+            "git",
+            "clone",
+            "--depth=1",
+            "--filter=blob:none",
+            "https://github.com/folke/lazy.nvim.git",
+            "--branch=stable", -- latest stable release
+            lazypath,
+        })
+    end
+    vim.opt.rtp:prepend(lazypath)
+end
+
 local is_ssh = os.getenv("SSH_CONNECTION") or os.getenv("SSH_CLIENT")
 if is_ssh then
     vim.opt.cursorline = false
@@ -59,7 +76,11 @@ elseif vim.g.vscode then
     vim.keymap.set({ "n" }, "<leader>fe", function () vscode.action("workbench.action.findInFiles") end, { noremap = true })
     vim.keymap.set({ "n" }, "fe", function() vscode.action("workbench.action.findInFiles") end, { noremap = true })
 
-    vim.keymap.set({ "n" }, "<leader>ff", function () vscode.action("workbench.action.showAllSymbols") end, { noremap = true })
+    vim.keymap.set({'n'}, '<leader>c', function() vscode.action("keybindings.editor.clearSearchResults") end, { noremap = true })
+    vim.keymap.set({ "n" }, "<leader>ff", function ()
+        vscode.action("keybindings.editor.clearSearchResults")
+        vscode.action("workbench.action.showAllSymbols")
+    end, { noremap = true })
     vim.keymap.set({ "n" }, "fe", function() vscode.action("workbench.action.findInFiles") end, { noremap = true })
     
     vim.keymap.set({ "n" }, "<leader>fr", function () vscode.action("workbench.action.openRecent") end, { noremap = true })
@@ -87,31 +108,32 @@ elseif vim.g.vscode then
     vim.keymap.set({'n'}, 'gp', function() vscode.action("workbench.action.navigateToLastEditLocation") end, { noremap = true })
     vim.keymap.set({'n'}, 'gn', function() vscode.action("workbench.action.navigateForwardInEditLocations") end, { noremap = true })
     vim.keymap.set({'n'}, 'gq', function() vscode.action("editor.action.marker.nextInFiles") end, { noremap = true })
-    vim.keymap.set({'n','x'}, '<Right>', function() vscode.action("workbench.action.navigateRight") end, { noremap = true })
-    vim.keymap.set({'n','x'}, '<Left>', function() vscode.action("workbench.action.navigateLeft") end, { noremap = true })
+    -- vim.keymap.set({'n','x'}, '<Right>', function() vscode.action("workbench.action.navigateRight") end, { noremap = true })
+    -- vim.keymap.set({'n','x'}, '<Left>', function() vscode.action("workbench.action.navigateLeft") end, { noremap = true })
     -- vim.keymap.set({'n','x'}, '<Up>', function() vscode.action("workbench.action.navigateUp") end, { noremap = true })
     -- vim.keymap.set({'n','x'}, '<Down>', function() vscode.action("workbench.action.navigateDown") end, { noremap = true })
     vim.keymap.set({'v'}, 'v', function() vscode.action("editor.action.smartSelect.expand") end, { noremap = true })
     -- config in vscode might be better?
     vim.keymap.set({'n'}, '<F9>', function() vscode.action("workbench.action.debug.run") end, { noremap = true })
     vim.keymap.set({'n'}, '<F10>', function() vscode.action("workbench.action.debug.start") end, { noremap = true })
-    vim.keymap.set({'n'}, '<F2>', function() vscode.action("workbench.action.toggleSidebarVisibility") end, { noremap = true })
+    vim.keymap.set({'n'}, '<F2>', function() vscode.action("workbench.action.toggleSidebarVisibility") vscode.action("workbench.view.explorer") end, { noremap = true })
     vim.keymap.set({'n'}, '<F3>', function() vscode.action("workbench.action.terminal.toggleTerminal") end, { noremap = true })
+    vim.keymap.set({'n'}, '<F4>', function() vscode.action("workbench.files.action.showActiveFileInExplorer") end, { noremap = true })
+    
+    vim.keymap.set({ "n", "x", "i" }, "<c-p>", function()
+        vscode.action("editor.action.addSelectionToPreviousFindMatch")
+    end)
+    vim.keymap.set({ "n", "x", "i" }, "<c-x>", function()
+        vscode.action("editor.action.moveSelectionToNextFindMatch")
+    end)
+    vim.keymap.set({ "n", "x", "i" }, "<F7>", function()
+        vscode.with_insert(function()
+            vscode.action("editor.action.addSelectionToNextFindMatch")
+        end)
+    end)
+    --[[ require("lazy").setup("vsplugins") ]]
 else
-    -- lazyvim 插件
-    local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-    if not vim.loop.fs_stat(lazypath) then
-        vim.fn.system({
-            "git",
-            "clone",
-            "--depth=1",
-            "--filter=blob:none",
-            "https://github.com/folke/lazy.nvim.git",
-            "--branch=stable", -- latest stable release
-            lazypath,
-        })
-    end
-    vim.opt.rtp:prepend(lazypath)
+    load_lazy()
     local opts = {
         install = {
             -- try to load one of these colorschemes when starting an installation during startup
