@@ -61,6 +61,10 @@ if is_ssh then
     vim.opt.cursorline = false
     vim.o.mouse = ""
 elseif vim.g.vscode then
+    load_lazy()
+    require("lazy").setup("vsplugins")
+    -- Ensure lazy.nvim is on the runtimepath when running embedded in VSCode
+    -- so subsequent calls to `require('lazy')` succeed.
     local vscode = require('vscode')
     -- using 'open default keyboard shortcuts' to see the command list
     vim.keymap.set({ "n" }, "mm", function () vscode.action("bookmarks.toggle") end , { noremap = true })
@@ -119,19 +123,15 @@ elseif vim.g.vscode then
     vim.keymap.set({'n'}, '<F2>', function() vscode.action("workbench.action.toggleSidebarVisibility") vscode.action("workbench.view.explorer") end, { noremap = true })
     vim.keymap.set({'n'}, '<F3>', function() vscode.action("workbench.action.terminal.toggleTerminal") end, { noremap = true })
     vim.keymap.set({'n'}, '<F4>', function() vscode.action("workbench.files.action.showActiveFileInExplorer") end, { noremap = true })
-    
-    vim.keymap.set({ "n", "x", "i" }, "<c-p>", function()
-        vscode.action("editor.action.addSelectionToPreviousFindMatch")
-    end)
-    vim.keymap.set({ "n", "x", "i" }, "<c-x>", function()
-        vscode.action("editor.action.moveSelectionToNextFindMatch")
-    end)
-    vim.keymap.set({ "n", "x", "i" }, "<F7>", function()
-        vscode.with_insert(function()
-            vscode.action("editor.action.addSelectionToNextFindMatch")
-        end)
-    end)
-    --[[ require("lazy").setup("vsplugins") ]]
+
+    -- vim.keymap.set({ "n", "x", "i" }, "<c-p>", function()
+    --     vscode.action("editor.action.addSelectionToPreviousFindMatch")
+    -- end)
+    -- vim.keymap.set({ "n", "x", "i" }, "<c-n>", function()
+    --     require("vscode-multi-cursor").addSelectionToNextFindMatch() end)
+    -- vim.keymap.set({ "n", "x", "i" }, "<c-m>", function()
+    --     vscode.action("editor.action.moveSelectionToNextFindMatch")
+    -- end)
 else
     load_lazy()
     local opts = {
@@ -142,6 +142,7 @@ else
     }
     require("lazy").setup("plugins", opts)
 end
+
 
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
