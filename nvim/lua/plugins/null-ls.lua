@@ -1,7 +1,8 @@
 return {
-    "jose-elias-alvarez/null-ls.nvim",
+    "nvimtools/none-ls.nvim",  -- Community fork of null-ls.nvim (maintained)
     event = { "BufReadPost", "BufNewFile" },
     dependencies = {
+        "nvim-lua/plenary.nvim",
         "jay-babu/mason-null-ls.nvim"
     },
     config = function()

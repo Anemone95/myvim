@@ -1,59 +1,53 @@
 return {
   'vscode-neovim/vscode-multi-cursor.nvim',
   event = 'VeryLazy',
-  cond = not not vim.g.vscode,
+  cond = vim.g.vscode,
   config = function ()
-  require('vscode-multi-cursor').setup { -- Config is optional
-  -- Disable default mappings so we can register explicit bindings here
-  default_mappings = false,
-  -- If set to true, only multiple cursors will be created without multiple selections
-  no_selection = false
-  }
-    -- Keep the default normal mapping but add visual/insert mappings to trigger
-    -- adding next selection when text is selected in visual mode.
-    vim.keymap.set('n', '<F7>', 'mciw*<Cmd>nohl<CR>', { remap = true })
-    vim.keymap.set('x', '<F7>', function()
-      -- Try VSCode built-in action first (works with editor selection),
-      -- then fallback to the plugin API. Schedule to ensure selection state
-      -- from Neovim is propagated to VSCode.
-      vim.schedule(function()
-        local ok, vscode = pcall(require, 'vscode')
-        if ok and vscode and vscode.action then
-          local s, err = pcall(function()
-            vscode.action('editor.action.addSelectionToNextFindMatch')
-          end)
-          if s then return end
-        end
+    require('vscode-multi-cursor').setup {
+      -- Keep default mappings (mc, mi, ma, etc.)
+      default_mappings = true,
+      -- Create selections (not just cursors)
+      no_selection = false
+    }
 
-        -- fallback to plugin API
-        pcall(function()
-          require('vscode-multi-cursor').addSelectionToNextFindMatch()
-        end)
-      end)
-    end, { silent = true, noremap = true })
-    vim.keymap.set('i', '<F7>', function()
-      -- In insert mode ensure proper focus/mode change via with_insert
-      pcall(function()
-        local ok, vscode = pcall(require, 'vscode')
-        if ok and vscode and vscode.with_insert then
-          vscode.with_insert(function()
-            -- schedule plugin call to allow VSCode selection to sync
-            vim.schedule(function()
-              pcall(function()
-                require('vscode-multi-cursor').addSelectionToNextFindMatch()
-              end)
-            end)
-          end)
-        else
-          -- fallback
-          vim.schedule(function()
-            pcall(function()
-              require('vscode-multi-cursor').addSelectionToNextFindMatch()
-            end)
-          end)
-        end
-      end)
-    end, { silent = true, noremap = true })
+    local cursor = require('vscode-multi-cursor')
+
+    -- Visual mode: Ctrl+n to create cursor on selection and add next match
+    -- This works like VSCode's Ctrl+D
+    vim.keymap.set('x', '<C-n>', function()
+      cursor.addSelectionToNextFindMatch()
+    end, { desc = 'Add selection to next find match' })
+
+    -- Insert mode: Ctrl+n to add next match
+    vim.keymap.set('i', '<C-n>', function()
+      cursor.addSelectionToNextFindMatch()
+    end, { desc = 'Add selection to next find match' })
+
+    -- Normal mode: Ctrl+n to add next match
+    vim.keymap.set('n', '<C-n>', function()
+      cursor.addSelectionToNextFindMatch()
+    end, { desc = 'Add selection to next find match' })
+
+
+    -- Visual mode: Ctrl+x to skip current and select next
+    vim.keymap.set('x', '<C-x>', function()
+      -- Use VSCode's native skip function
+      require('vscode').action('editor.action.moveSelectionToNextFindMatch')
+    end, { desc = 'Skip and select next match' })
+
+    -- Alternative: Ctrl+d (like VSCode native)
+    vim.keymap.set({ 'n', 'x', 'i' }, '<C-d>', function()
+      cursor.addSelectionToNextFindMatch()
+    end, { desc = 'Add selection to next (Ctrl+D)' })
+
+    -- F7 as alternative to Ctrl+n
+    vim.keymap.set({ 'n', 'x' }, '<F7>', function()
+      cursor.addSelectionToNextFindMatch()
+    end, { desc = 'Add selection to next (F7)' })
+
+    -- Normal mode: Quick select word under cursor
+    -- Press this to start, then press Ctrl+n to add more
+    vim.keymap.set('n', 'mw', 'mciw', { remap = true, desc = 'Select current word (multi-cursor)' })
   end,
   opts = {},
 }
