@@ -4,50 +4,39 @@ return {
   cond = vim.g.vscode,
   config = function ()
     require('vscode-multi-cursor').setup {
-      -- Keep default mappings (mc, mi, ma, etc.)
+      -- Enable default mappings: mc, mi, ma, etc.
       default_mappings = true,
-      -- Create selections (not just cursors)
       no_selection = false
     }
 
     local cursor = require('vscode-multi-cursor')
 
-    -- Visual mode: Ctrl+n to create cursor on selection and add next match
-    -- This works like VSCode's Ctrl+D
-    vim.keymap.set('x', '<C-n>', function()
+    -- 使用 vscode-multi-cursor 插件的 API（关键！）
+    -- 这个 API 会正确处理多光标状态，不会在按 i 时合并
+
+    -- Visual/Normal 模式：Ctrl+n 添加下一个相同单词
+    vim.keymap.set({'n', 'x', 'i'}, '<C-n>', function()
       cursor.addSelectionToNextFindMatch()
-    end, { desc = 'Add selection to next find match' })
+    end, { desc = 'Add next match to multi-cursor' })
 
-    -- Insert mode: Ctrl+n to add next match
-    vim.keymap.set('i', '<C-n>', function()
-      cursor.addSelectionToNextFindMatch()
-    end, { desc = 'Add selection to next find match' })
+    -- Visual/Normal 模式：Ctrl+x 跳过当前，选择下一个
+    vim.keymap.set({'n', 'x', 'i'}, '<C-x>', function()
+      cursor.skipSelection()
+    end, { desc = 'Skip current and select next' })
 
-    -- Normal mode: Ctrl+n to add next match
-    vim.keymap.set('n', '<C-n>', function()
-      cursor.addSelectionToNextFindMatch()
-    end, { desc = 'Add selection to next find match' })
+    -- Visual/Normal 模式：Ctrl+Shift+n 选择所有相同单词（可选）
+    vim.keymap.set({'n', 'x', 'i'}, '<C-S-n>', function()
+      cursor.selectHighlights()
+    end, { desc = 'Select all matches' })
 
-
-    -- Visual mode: Ctrl+x to skip current and select next
-    vim.keymap.set('x', '<C-x>', function()
-      -- Use VSCode's native skip function
-      require('vscode').action('editor.action.moveSelectionToNextFindMatch')
-    end, { desc = 'Skip and select next match' })
-
-    -- Alternative: Ctrl+d (like VSCode native)
-    vim.keymap.set({ 'n', 'x', 'i' }, '<C-d>', function()
-      cursor.addSelectionToNextFindMatch()
-    end, { desc = 'Add selection to next (Ctrl+D)' })
-
-    -- F7 as alternative to Ctrl+n
-    vim.keymap.set({ 'n', 'x' }, '<F7>', function()
-      cursor.addSelectionToNextFindMatch()
-    end, { desc = 'Add selection to next (F7)' })
-
-    -- Normal mode: Quick select word under cursor
-    -- Press this to start, then press Ctrl+n to add more
-    vim.keymap.set('n', 'mw', 'mciw', { remap = true, desc = 'Select current word (multi-cursor)' })
+    -- 工作流程：
+    -- 1. 光标在单词上（或按 v 选中单词）
+    -- 2. 按 Ctrl+n → 添加下一个相同单词（插件会创建多光标）
+    -- 3. 继续按 Ctrl+n → 继续添加更多
+    -- 4. 按 d/x → 删除所有选中内容
+    -- 5. 按 i → 在所有位置进入插入模式（应该能工作！）
+    -- 6. 输入内容 → 所有位置同时输入
+    -- 7. 按 Esc → 完成
   end,
   opts = {},
 }
