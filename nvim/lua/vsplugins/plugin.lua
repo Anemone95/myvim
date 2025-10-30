@@ -31,23 +31,6 @@ return {
       cursor.selectHighlights()
     end, { desc = 'Select all matches' })
 
-    -- vim.keymap.set({'n', 'x', 'i'}, '<C-n>', 'mciw*<Cmd>nohl<CR>', { remap = true })
-    
-    -- vim.keymap.set({ 'n','x' }, 'I', function()
-    --     local mode = vim.api.nvim_get_mode().mode
-    --     cursor.start_left_edge { no_selection = mode == '\x16' }
-    -- end, { desc = 'Multi-cursor insert at left edge' })
-    
-    -- vim.keymap.set({ 'n','x' }, 'i', function()
-    --     local mode = vim.api.nvim_get_mode().mode
-    --     cursor.start_left { no_selection = mode == '\x16' }
-    -- end, { desc = 'Multi-cursor insert at right edge'})
-    
-    -- vim.keymap.set({ 'x' }, 'a', function()
-    --     local mode = vim.api.nvim_get_mode().mode
-    --     cursor.start_right { no_selection = mode == '\x16' }
-    -- end, { desc = 'Multi-cursor append at right edge' })
-
   end,
   opts = {},
 }
