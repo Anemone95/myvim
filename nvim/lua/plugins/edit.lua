@@ -47,7 +47,7 @@ return {
                 "Treesitter Search"
             },
             {
-                "<c-s>",
+                "<leader>s",
                 mode = { "c" },
                 function() require("flash").toggle() end,
                 desc =
