@@ -179,6 +179,6 @@ noremap <Right> <c-w>l
 
 if has('multi_byte_ime')
     hi Cursor guifg=bg guibg=White gui=NONE
-    hi CursorIM guifg=NONE guibg=Skyblue gui=NONE
     set iminsert=0 imsearch=0
+    hi CursorIM guifg=NONE guibg=Skyblue gui=NONE
 endif

@@ -16,6 +16,69 @@ vim.keymap.set("v", "K", ":m '>-2<CR>gv=gv")
 vim.keymap.set("n", "<space>", "@=((foldclosed(line('.')) < 0) ? 'zc' : 'zO')<CR>")
 vim.keymap.set("n", "za", "zM")
 vim.keymap.set("n", "zo", "zO")
+
+do
+    local opts = { desc = "Move by display line", silent = true, remap = true, noremap = true }
+    vim.keymap.set({ "n", "v", "x" }, "j", "gj", opts)
+    vim.keymap.set({ "n", "v", "x" }, "k", "gk", opts)
+    -- vim.keymap.set({ "n", "v", "x" }, "0", "g0", opts)
+end
+
+-- Smart sentence navigation for markdown and latex files
+local function smart_dollar()
+    local ft = vim.bo.filetype
+    if ft == "markdown" or ft == "tex" or ft == "latex" then
+        local line = vim.api.nvim_get_current_line()
+        local col = vim.fn.col('.')
+        local rest_of_line = line:sub(col + 1)
+
+        -- Search for sentence ending punctuation: . , ; ?
+        local next_pos = rest_of_line:find('[%.,%?;]')
+
+        if next_pos then
+            -- Move to the punctuation mark
+            vim.cmd('normal! ' .. next_pos .. 'l')
+        else
+            -- No punctuation found, go to end of line
+            vim.cmd('normal! $')
+        end
+    else
+        vim.cmd('normal! $')
+    end
+end
+
+local function smart_zero()
+    local ft = vim.bo.filetype
+    if ft == "markdown" or ft == "tex" or ft == "latex" then
+        local line = vim.api.nvim_get_current_line()
+        local col = vim.fn.col('.')
+        local before_cursor = line:sub(1, col - 1)
+
+        -- Search backwards for sentence ending punctuation: . , ; ?
+        local prev_pos = nil
+        for i = #before_cursor, 1, -1 do
+            local char = before_cursor:sub(i, i)
+            if char == '.' or char == ',' or char == ';' or char == '?' then
+                prev_pos = i
+                break
+            end
+        end
+
+        if prev_pos then
+            -- Move cursor to the punctuation mark
+            vim.api.nvim_win_set_cursor(0, {vim.fn.line('.'), prev_pos - 1})
+        else
+            -- No punctuation found, go to beginning of line
+            vim.cmd('normal! 0')
+        end
+    else
+        vim.cmd('normal! 0')
+    end
+end
+
+vim.keymap.set({"n", "v", "x"}, "0", smart_zero, { noremap = true, silent = true })
+vim.keymap.set({"n", "v", "x"}, "$", smart_dollar, { noremap = true, silent = true })
+
 -- 导入数学符号map
 vim.cmd('source ~/.vimrc.unimap')
 
@@ -29,12 +92,11 @@ elseif not os.getenv("HOME") == '/Users' then
     vim.opt.guifontwide = "WenQuanYi Micro Hei 11"
 end
 
--- 设置 netrw
-vim.g.netrw_banner = 0        -- 关闭启动时的横幅信息
-vim.g.netrw_liststyle = 3     -- 设置文件列表风格，3 为树状视图
-vim.g.netrw_browse_split = 4  -- 在新标签页中打开选择的文件
-vim.g.netrw_altv = 1          -- 在垂直分割窗口中打开文件
-vim.g.netrw_winsize = 20      -- 设置 netrw 窗口的宽度百分比
+vim.g.netrw_banner = 0
+vim.g.netrw_liststyle = 3
+vim.g.netrw_browse_split = 4
+vim.g.netrw_altv = 1
+vim.g.netrw_winsize = 20
 vim.g.netrw_list_hide = '.*\\~$,\\~$,\\~\\~$'
 vim.g.netrw_sort_sequence = '[\\/],$,*'
 
@@ -132,6 +194,9 @@ elseif vim.g.vscode then
     -- vim.keymap.set({ "n", "x", "i" }, "<c-m>", function()
     --     vscode.action("editor.action.moveSelectionToNextFindMatch")
     -- end)
+--
+    -- vim.opt.number = true
+    -- vim.opt.relativenumber = true
 else
     load_lazy()
     local opts = {

@@ -37,10 +37,8 @@ nmap bp <action>(PreviousTab)
 
 " 搜索
 nmap <leader>ff <action>(SearchEverywhere)
-nmap ff <action>(SearchEverywhere)
 nmap <leader>fe <action>(FindInPath)
-nmap fe <action>(FindInPath)
-nmap fr <action>(RecentChangedFiles)
+nmap <leader>fr <action>(RecentChangedFiles)
 nmap <leader>gr <action>(RecentChangedFiles)
 nmap <leader>st <action>(FileStructurePopup)
 " noremap \fp <action>(FindInPath)
@@ -365,3 +363,6 @@ imap <leader><Esc> \\<Esc><Esc>
 nmap <leader>vs <Action>(MoveTabRight)
 nmap <leader>sp <Action>(MoveTabDown)
 nmap <leader>m <Action>(MoveEditorToOppositeTabGroup)
+
+nmap s <Action>(flash.search)
+xmap s <Action>(flash.search)
