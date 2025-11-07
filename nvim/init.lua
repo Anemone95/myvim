@@ -18,10 +18,9 @@ vim.keymap.set("n", "za", "zM")
 vim.keymap.set("n", "zo", "zO")
 
 do
-    local opts = { desc = "Move by display line", silent = true, remap = true, noremap = true }
+    local opts = { desc = "Move by display line", silent = true, noremap = true }
     vim.keymap.set({ "n", "v", "x" }, "j", "gj", opts)
     vim.keymap.set({ "n", "v", "x" }, "k", "gk", opts)
-    -- vim.keymap.set({ "n", "v", "x" }, "0", "g0", opts)
 end
 
 -- Smart sentence navigation for markdown and latex files
