@@ -17,11 +17,6 @@ vim.keymap.set("n", "<space>", "@=((foldclosed(line('.')) < 0) ? 'zc' : 'zO')<CR
 vim.keymap.set("n", "za", "zM")
 vim.keymap.set("n", "zo", "zO")
 
-do
-    local opts = { desc = "Move by display line", silent = true, noremap = true }
-    vim.keymap.set({ "n", "v", "x" }, "j", "gj", opts)
-    vim.keymap.set({ "n", "v", "x" }, "k", "gk", opts)
-end
 
 -- Smart sentence navigation for markdown and latex files
 local function smart_dollar()
@@ -185,17 +180,9 @@ elseif vim.g.vscode then
     vim.keymap.set({'n'}, '<F3>', function() vscode.action("workbench.action.terminal.toggleTerminal") end, { noremap = true })
     vim.keymap.set({'n'}, '<F4>', function() vscode.action("workbench.files.action.showActiveFileInExplorer") end, { noremap = true })
 
-    -- vim.keymap.set({ "n", "x", "i" }, "<c-p>", function()
-    --     vscode.action("editor.action.addSelectionToPreviousFindMatch")
-    -- end)
-    -- vim.keymap.set({ "n", "x", "i" }, "<c-n>", function()
-    --     require("vscode-multi-cursor").addSelectionToNextFindMatch() end)
-    -- vim.keymap.set({ "n", "x", "i" }, "<c-m>", function()
-    --     vscode.action("editor.action.moveSelectionToNextFindMatch")
-    -- end)
---
-    -- vim.opt.number = true
-    -- vim.opt.relativenumber = true
+    local opts = { desc = "Move by display line", silent = true, remap = true }
+    vim.keymap.set({ "n", "v", "x" }, "j", "gj", opts)
+    vim.keymap.set({ "n", "v", "x" }, "k", "gk", opts)
 else
     load_lazy()
     local opts = {
@@ -205,6 +192,9 @@ else
         },
     }
     require("lazy").setup("plugins", opts)
+    local opts = { desc = "Move by display line", silent = true, noremap = true }
+    vim.keymap.set({ "n", "v", "x" }, "j", "gj", opts)
+    vim.keymap.set({ "n", "v", "x" }, "k", "gk", opts)
 end
 
 
