@@ -61,9 +61,9 @@ local servers = {
     taplo = {},
     texlab = {},
     vimls = {},
-    volar = {},
     yamlls = {},
-    tsserver = {},             -- need tsc
+    ts_ls = {},                -- TypeScript/JavaScript LSP (renamed from tsserver in mason-lspconfig 0.28+)
+    -- volar = {},             -- Removed: use ts_ls with Vue support or volar v2 which is not in mason
     java_language_server = {}, -- brew install maven protobuf
     jedi_language_server = {}, -- need venv on linux
 }
@@ -201,7 +201,10 @@ return {
                 }
             })
             require("mason").setup()
-            local capabilities = require('cmp_nvim_lsp').default_capabilities()
+            local capabilities = vim.lsp.protocol.make_client_capabilities()
+            capabilities.offsetEncoding = { "utf-16" }
+            capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
             require("mason-lspconfig").setup({
                 automatic_installation = true,
                 ensure_installed = vim.tbl_keys(servers),
@@ -211,6 +214,19 @@ return {
                             settings = servers[server_name],
                             on_attach = on_attach,
                             capabilities = capabilities,
+                            flags = {
+                                debounce_text_changes = 150,
+                            }
+                        }
+                    end,
+                    ["clangd"] = function()
+                        require("lspconfig").clangd.setup {
+                            on_attach = on_attach,
+                            capabilities = capabilities,
+                            cmd = {
+                                "clangd",
+                                "--offset-encoding=utf-16",
+                            },
                         }
                     end,
                 }

@@ -26,6 +26,7 @@ return {
         },
         ---@type TSConfig
         opts = {
+            ignore_install = {}, -- 如果某个解析器有问题,添加到这里
             ensure_installed = {
                 "arduino",
                 -- "agda",
@@ -91,18 +92,43 @@ return {
         },
         ---@param opts TSConfig
         config = function(_, opts)
-            if type(opts.ensure_installed) == "table" then
-                ---@type table<string, boolean>
-                local added = {}
-                opts.ensure_installed = vim.tbl_filter(function(lang)
-                    if added[lang] then
-                        return false
-                    end
-                    added[lang] = true
-                    return true
-                end, opts.ensure_installed)
+            -- Enable treesitter highlighting
+            if opts.highlight and opts.highlight.enable then
+                vim.api.nvim_create_autocmd("FileType", {
+                    callback = function()
+                        pcall(vim.treesitter.start)
+                    end,
+                })
             end
-            require("nvim-treesitter.configs").setup(opts)
+
+            -- Enable treesitter-based indentation
+            if opts.indent and opts.indent.enable then
+                vim.api.nvim_create_autocmd("FileType", {
+                    callback = function()
+                        vim.bo.indentexpr = "v:lua.require'nvim-treesitter.indent'.get_indent()"
+                    end,
+                })
+            end
+
+            -- Setup incremental selection
+            if opts.incremental_selection and opts.incremental_selection.enable then
+                local keymaps = opts.incremental_selection.keymaps
+                if keymaps.init_selection then
+                    vim.keymap.set('n', keymaps.init_selection, function()
+                        require('nvim-treesitter.incremental_selection').init_selection()
+                    end)
+                end
+                if keymaps.node_incremental then
+                    vim.keymap.set('x', keymaps.node_incremental, function()
+                        require('nvim-treesitter.incremental_selection').node_incremental()
+                    end)
+                end
+                if keymaps.node_decremental then
+                    vim.keymap.set('x', keymaps.node_decremental, function()
+                        require('nvim-treesitter.incremental_selection').node_decremental()
+                    end)
+                end
+            end
 
             if load_textobjects then
                 -- PERF: no need to load the plugin, if we only need its queries for mini.ai
@@ -118,15 +144,13 @@ return {
                     end
                 end
             end
+
+            -- Setup treesitter-based folding
             vim.opt.foldlevel = 200
-            vim.opt.foldmethod = "expr"
-            vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-            -- 否则第一个 buffer 不支持折叠
-            vim.api.nvim_create_autocmd('VimEnter', {
+            vim.api.nvim_create_autocmd("FileType", {
                 callback = function()
-                    vim.defer_fn(function()
-                        vim.cmd("set foldexpr=nvim_treesitter#foldexpr()")
-                    end, 1000)
+                    vim.wo[0][0].foldmethod = 'expr'
+                    vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
                 end,
             })
             -- vim.opt.foldenable = false

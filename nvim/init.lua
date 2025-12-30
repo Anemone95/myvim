@@ -5,6 +5,24 @@ vim.opt.undodir = '/tmp/nvim/undo'
 -- 允许在项目文件夹添加.nvim.lua
 vim.opt.exrc = true
 
+-- Fix for position_encoding warning in Neovim v0.11+
+if vim.fn.has('nvim-0.11') == 1 then
+    local original_make_position_params = vim.lsp.util.make_position_params
+    ---@diagnostic disable-next-line: duplicate-set-field
+    vim.lsp.util.make_position_params = function(win, offset_encoding)
+        if not offset_encoding then
+            local bufnr = vim.api.nvim_win_get_buf(win or 0)
+            local clients = vim.lsp.get_clients({ bufnr = bufnr })
+            if clients and clients[1] then
+                offset_encoding = clients[1].offset_encoding or 'utf-16'
+            else
+                offset_encoding = 'utf-16'
+            end
+        end
+        return original_make_position_params(win, offset_encoding)
+    end
+end
+
 -- 允许 options map
 vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
 vim.keymap.set("n", "bn", "<cmd>bnext<CR>")
