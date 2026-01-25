@@ -112,6 +112,31 @@ vim.g.netrw_winsize = 20
 vim.g.netrw_list_hide = '.*\\~$,\\~$,\\~\\~$'
 vim.g.netrw_sort_sequence = '[\\/],$,*'
 
+-- copy visual location: @File#L1-99
+local function copy_visual_location()
+  local file = vim.api.nvim_buf_get_name(0)
+  local s = vim.fn.getpos("v")
+  local e = vim.fn.getpos(".")
+  local sline, eline = s[2], e[2]
+
+  -- 防反选
+  if eline < sline then
+    sline, eline = eline, sline
+  end
+
+  local location
+  if sline == eline then
+    location = string.format("@%s#L%d", file, sline)
+  else
+    location = string.format("@%s#L%d-%d", file, sline, eline)
+  end
+
+  vim.fn.setreg("+", location)
+  vim.notify("Copied: " .. location)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
+end
+
+vim.keymap.set("x", "g", copy_visual_location, { noremap = true, silent = true })
 
 local function load_lazy()
     -- lazyvim 插件

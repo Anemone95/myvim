@@ -182,3 +182,4 @@ if has('multi_byte_ime')
     set iminsert=0 imsearch=0
     hi CursorIM guifg=NONE guibg=Skyblue gui=NONE
 endif
+

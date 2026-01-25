@@ -15,13 +15,15 @@ nmap mp <action>(GotoPreviousBookmark)
 nmap mn <action>(GotoNextBookmark)
 
 " 运行
-nmap <F9> <action>(Run)
-imap <F9> <action>(Run)
-nmap <S-F9> <action>(RunClass)
-imap <S-F9> <action>(RunClass)
+nmap <F9> <Action>(Run)
+imap <F9> <Action>(Run)
+nmap <S-F9> <Action>(ChooseRunConfiguration)
+imap <S-F9> <Action>(ChooseRunConfiguration)
 " 调试
-nmap <F10> <action>(Debug)
-imap <F10> <action>(Debug)
+nmap <F10> <Action>(Debug)
+imap <F10> <Action>(Debug)
+nmap <S-F10> <Action>(ChooseDebugConfiguration)
+imap <S-F10> <Action>(ChooseDebugConfiguration)
 
 nmap <F8> <action>(StepOver)
 nmap <F7> <action>(StepInto)
@@ -100,7 +102,8 @@ nmap gq <action>(GotoNextError)
 " sethandler <F2> a:vim
 nmap <F2> :NERDTreeToggle<CR>
 nmap <F3> <action>(ActivateTerminalToolWindow)
-nmap <F4> :NERDTreeFind<CR>
+nmap <F4> <Action>(SelectInProjectView)
+nmap <F5> <Action>(HideAllWindows)
 nmap <F12> <action>(HideAllWindows)
 
 " selection quotes
@@ -366,3 +369,6 @@ nmap <leader>m <Action>(MoveEditorToOppositeTabGroup)
 
 nmap s <Action>(flash.search)
 xmap s <Action>(flash.search)
+
+" copy visual location to Claude
+vmap g <Action>(com.anthropic.code.plugin.actions.SendToClaudeAction)
