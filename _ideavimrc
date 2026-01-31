@@ -3,10 +3,13 @@ set macmeta
 " like key bindings
 source $HOME/.vimrc.base
 
+let mapleader = "\\"
+
 Plug 'preservim/nerdtree'
 Plug 'terryma/vim-multiple-cursors'
 set surround
 set clipboard+=ideaput
+nmap <leader>r <Action>(IdeaVim.ReloadVimRc.reload)
 set ideajoin
 
 " 书签
@@ -370,5 +373,5 @@ nmap <leader>m <Action>(MoveEditorToOppositeTabGroup)
 nmap s <Action>(flash.search)
 xmap s <Action>(flash.search)
 
-" copy visual location to Claude
-vmap g <Action>(com.anthropic.code.plugin.actions.SendToClaudeAction)
+" copy reference (file:line or class.method)
+vmap <leader>g <Action>(SmartCopy.CopyPathOnly)<Esc>

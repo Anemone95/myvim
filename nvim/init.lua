@@ -136,7 +136,7 @@ local function copy_visual_location()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
 end
 
-vim.keymap.set("x", "g", copy_visual_location, { noremap = true, silent = true })
+vim.keymap.set("x", "<leader>g", copy_visual_location, { noremap = true, silent = true })
 
 local function load_lazy()
     -- lazyvim 插件
