@@ -152,6 +152,22 @@ local function load_lazy()
             lazypath,
         })
     end
+
+    local head_file = lazypath .. "/.git/HEAD"
+    if vim.fn.filereadable(head_file) == 1 then
+        local head = vim.fn.readfile(head_file, "", 1)[1] or ""
+        if head ~= "" and not vim.startswith(head, "ref: ") then
+            vim.fn.system({
+                "git",
+                "-C",
+                lazypath,
+                "checkout",
+                "-B",
+                "stable",
+            })
+        end
+    end
+
     vim.opt.rtp:prepend(lazypath)
 end
 
