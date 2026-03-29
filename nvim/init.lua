@@ -228,6 +228,7 @@ elseif vim.g.vscode then
     vim.keymap.set({ "n", "v", "x" }, "j", "gj", opts)
     vim.keymap.set({ "n", "v", "x" }, "k", "gk", opts)
 else
+    --[[ normal init ]]
     load_lazy()
     local opts = {
         install = {
@@ -239,6 +240,15 @@ else
     local opts = { desc = "Move by display line", silent = true, noremap = true }
     vim.keymap.set({ "n", "v", "x" }, "j", "gj", opts)
     vim.keymap.set({ "n", "v", "x" }, "k", "gk", opts)
+    vim.o.autoread = true
+
+    local group = vim.api.nvim_create_augroup("auto_checktime", { clear = true })
+
+    vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+        group = group,
+        pattern = "*",
+        command = "checktime",
+    })
 end
 
 
