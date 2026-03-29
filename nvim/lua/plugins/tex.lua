@@ -57,6 +57,7 @@ return {
                         })
                     end
 
+                    map("<F9>", "<cmd>TeXpressoRoot<CR>", "TeXpresso launch root file")
                     map("<leader>tv", "<cmd>TeXpressoRoot<CR>", "TeXpresso launch root file")
                     map("<leader>ts", texpresso.synctex_forward, "TeXpresso SyncTeX forward")
                     map("<leader>tn", texpresso.next_page, "TeXpresso next page")
