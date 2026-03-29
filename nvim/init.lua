@@ -88,8 +88,8 @@ local function smart_zero()
     end
 end
 
-vim.keymap.set({"n", "v", "x"}, "0", smart_zero, { noremap = true, silent = true })
-vim.keymap.set({"n", "v", "x"}, "$", smart_dollar, { noremap = true, silent = true })
+-- vim.keymap.set({"n", "v", "x"}, "0", smart_zero, { noremap = true, silent = true })
+-- vim.keymap.set({"n", "v", "x"}, "$", smart_dollar, { noremap = true, silent = true })
 
 -- 导入数学符号map
 vim.cmd('source ~/.vimrc.unimap')
@@ -222,6 +222,7 @@ elseif vim.g.vscode then
     vim.keymap.set({'n'}, '<F2>', function() vscode.action("workbench.action.toggleSidebarVisibility") vscode.action("workbench.view.explorer") end, { noremap = true })
     vim.keymap.set({'n'}, '<F3>', function() vscode.action("workbench.action.terminal.toggleTerminal") end, { noremap = true })
     vim.keymap.set({'n'}, '<F4>', function() vscode.action("workbench.files.action.showActiveFileInExplorer") end, { noremap = true })
+    vim.keymap.set({'n'}, '<F5>', function() vscode.action("workbench.action.toggleZenMode") end, { noremap = true })
 
     local opts = { desc = "Move by display line", silent = true, remap = true }
     vim.keymap.set({ "n", "v", "x" }, "j", "gj", opts)
