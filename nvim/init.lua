@@ -176,6 +176,10 @@ if is_ssh then
     vim.opt.cursorline = false
     vim.o.mouse = ""
 elseif vim.g.vscode then
+    if vim.g.vscode_clipboard then
+        vim.g.clipboard = vim.g.vscode_clipboard
+    end
+
     load_lazy()
     require("lazy").setup("vsplugins")
     -- Ensure lazy.nvim is on the runtimepath when running embedded in VSCode
@@ -240,9 +244,72 @@ elseif vim.g.vscode then
     vim.keymap.set({'n'}, '<F4>', function() vscode.action("workbench.files.action.showActiveFileInExplorer") end, { noremap = true })
     vim.keymap.set({'n'}, '<F5>', function() vscode.action("workbench.action.toggleZenMode") end, { noremap = true })
 
-    local opts = { desc = "Move by display line", silent = true, remap = true }
-    vim.keymap.set({ "n", "v", "x" }, "j", "gj", opts)
-    vim.keymap.set({ "n", "v", "x" }, "k", "gk", opts)
+    local function move_vscode_visible_line(delta)
+        vscode.eval([[
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                return false;
+            }
+
+            const lineCount = editor.document.lineCount;
+            const ranges = editor.visibleRanges
+                .map((range) => ({ start: range.start.line, end: range.end.line }))
+                .sort((a, b) => a.start - b.start);
+
+            function clampLine(line) {
+                return Math.max(0, Math.min(line, lineCount - 1));
+            }
+
+            function visibleLineAtOrAfter(line) {
+                line = clampLine(line);
+                for (const range of ranges) {
+                    if (line >= range.start && line <= range.end) {
+                        return line;
+                    }
+                    if (line < range.start) {
+                        return range.start;
+                    }
+                }
+                return line;
+            }
+
+            function visibleLineAtOrBefore(line) {
+                line = clampLine(line);
+                for (let i = ranges.length - 1; i >= 0; i--) {
+                    const range = ranges[i];
+                    if (line >= range.start && line <= range.end) {
+                        return line;
+                    }
+                    if (line > range.end) {
+                        return range.end;
+                    }
+                }
+                return line;
+            }
+
+            let targetLine = editor.selection.active.line;
+            const count = Math.max(1, args.count || 1);
+            for (let i = 0; i < count; i++) {
+                targetLine = args.delta > 0
+                    ? visibleLineAtOrAfter(targetLine + 1)
+                    : visibleLineAtOrBefore(targetLine - 1);
+            }
+
+            const targetText = editor.document.lineAt(targetLine).text;
+            const targetChar = Math.min(editor.selection.active.character, targetText.length);
+            const target = new vscode.Position(targetLine, targetChar);
+            editor.selection = new vscode.Selection(target, target);
+            editor.revealRange(new vscode.Range(target, target), vscode.TextEditorRevealType.Default);
+            return true;
+        ]], { args = { delta = delta, count = vim.v.count1 } }, 1000)
+    end
+
+    vim.keymap.set({ "n" }, "j", function() move_vscode_visible_line(1) end, { desc = "Move down by visible VS Code line", silent = true, noremap = true })
+    vim.keymap.set({ "n" }, "k", function() move_vscode_visible_line(-1) end, { desc = "Move up by visible VS Code line", silent = true, noremap = true })
+
+    local opts = { desc = "Move by display line", silent = true, noremap = true }
+    vim.keymap.set({ "v", "x" }, "j", "gj", opts)
+    vim.keymap.set({ "v", "x" }, "k", "gk", opts)
 else
     --[[ normal init ]]
     load_lazy()
