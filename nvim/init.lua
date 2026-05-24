@@ -244,21 +244,33 @@ elseif vim.g.vscode then
     vim.keymap.set({'n'}, '<F4>', function() vscode.action("workbench.files.action.showActiveFileInExplorer") end, { noremap = true })
     vim.keymap.set({'n'}, '<F5>', function() vscode.action("workbench.action.toggleZenMode") end, { noremap = true })
 
-    local function move_vscode_wrapped_line(direction)
+    local function move_vscode_wrapped_line(direction, select)
         vscode.action("cursorMove", {
             args = {
                 to = direction,
                 by = "wrappedLine",
                 value = vim.v.count1,
+                select = select,
             },
         })
     end
 
+    local function move_vscode_visual_wrapped_line(direction)
+        local mode = vim.api.nvim_get_mode().mode
+        if mode == "V" or mode == "\022" then
+            return direction == "down" and "j" or "k"
+        end
+
+        move_vscode_wrapped_line(direction, true)
+        return "<Ignore>"
+    end
+
     local opts = { desc = "Move by display line", silent = true, noremap = true }
-    vim.keymap.set("n", "j", function() move_vscode_wrapped_line("down") end, opts)
-    vim.keymap.set("n", "k", function() move_vscode_wrapped_line("up") end, opts)
-    vim.keymap.set({ "v", "x" }, "j", "gj", opts)
-    vim.keymap.set({ "v", "x" }, "k", "gk", opts)
+    vim.keymap.set("n", "j", function() move_vscode_wrapped_line("down", false) end, opts)
+    vim.keymap.set("n", "k", function() move_vscode_wrapped_line("up", false) end, opts)
+    local visual_opts = { desc = "Move by display line", expr = true, silent = true, noremap = true }
+    vim.keymap.set({ "v", "x" }, "j", function() return move_vscode_visual_wrapped_line("down") end, visual_opts)
+    vim.keymap.set({ "v", "x" }, "k", function() return move_vscode_visual_wrapped_line("up") end, visual_opts)
 else
     --[[ normal init ]]
     load_lazy()
