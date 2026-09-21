@@ -181,17 +181,6 @@ return {
                 end
             end
 
-            local ori_java_home = os.getenv("JAVA_HOME")
-            local java_13_home = os.getenv("JAVA_13_HOME")
-
-            -- Check if java_21_home is empty
-            if not java_13_home or java_13_home == "" then
-                -- Use Neovim's standard error function to report the error
-                vim.notify("Error: JAVA_13_HOME environment variable is not set.", "error")
-            end
-
-            os.execute("export JAVA_HOME=" .. java_13_home)
-
             require("neoconf").setup()
             require("neodev").setup()
             require("fidget").setup()
@@ -205,34 +194,21 @@ return {
             capabilities.offsetEncoding = { "utf-16" }
             capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
+            vim.lsp.config('*', {
+                on_attach = on_attach,
+                capabilities = capabilities,
+                flags = { debounce_text_changes = 150 },
+            })
+            for server_name, settings in pairs(servers) do
+                vim.lsp.config(server_name, { settings = settings })
+            end
+            vim.lsp.config('clangd', {
+                cmd = { 'clangd', '--offset-encoding=utf-16' },
+            })
             require("mason-lspconfig").setup({
-                automatic_installation = true,
                 ensure_installed = vim.tbl_keys(servers),
-                handlers = {
-                    function(server_name) -- default handler (optional)
-                        require("lspconfig")[server_name].setup {
-                            settings = servers[server_name],
-                            on_attach = on_attach,
-                            capabilities = capabilities,
-                            flags = {
-                                debounce_text_changes = 150,
-                            }
-                        }
-                    end,
-                    ["clangd"] = function()
-                        require("lspconfig").clangd.setup {
-                            on_attach = on_attach,
-                            capabilities = capabilities,
-                            cmd = {
-                                "clangd",
-                                "--offset-encoding=utf-16",
-                            },
-                        }
-                    end,
-                }
             })
             vim.opt.updatetime = 500
-            os.execute("export JAVA_HOME=" .. ori_java_home)
             -- FIXME: not very useful
             -- vim.api.nvim_create_autocmd(
             -- "CursorHold",
