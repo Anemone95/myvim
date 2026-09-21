@@ -1,3 +1,25 @@
+-- Use the Windows clipboard directly from WSL, including inside tmux.
+if vim.fn.has('wsl') == 1 and not vim.g.vscode then
+    local win32yank = vim.fn.exepath('win32yank.exe')
+    if win32yank == '' then
+        win32yank = '/mnt/c/Program Files/Neovim/bin/win32yank.exe'
+    end
+    if vim.fn.executable(win32yank) == 1 then
+        vim.g.clipboard = {
+            name = 'Windows clipboard (WSL)',
+            copy = {
+                ['+'] = { win32yank, '-i', '--crlf' },
+                ['*'] = { win32yank, '-i', '--crlf' },
+            },
+            paste = {
+                ['+'] = { win32yank, '-o', '--lf' },
+                ['*'] = { win32yank, '-o', '--lf' },
+            },
+            cache_enabled = 0,
+        }
+    end
+end
+
 vim.cmd('source ~/.vimrc.base')
 -- 允许关闭文件后 undo
 vim.opt.undofile = true
@@ -280,7 +302,18 @@ else
             colorscheme = { "tokyonight-storm" },
         },
     }
-    require("lazy").setup("plugins", opts)
+    local plugin_specs = "plugins"
+    if vim.g.myvim_config_root then
+        plugin_specs = {}
+        local pattern = vim.g.myvim_config_root .. "/lua/plugins/*.lua"
+        for _, file in ipairs(vim.fn.glob(pattern, false, true)) do
+            local specs = dofile(file)
+            if type(specs) == "table" then
+                vim.list_extend(plugin_specs, specs)
+            end
+        end
+    end
+    require("lazy").setup(plugin_specs, opts)
     local opts = { desc = "Move by display line", silent = true, noremap = true }
     vim.keymap.set({ "n", "v", "x" }, "j", "gj", opts)
     vim.keymap.set({ "n", "v", "x" }, "k", "gk", opts)
