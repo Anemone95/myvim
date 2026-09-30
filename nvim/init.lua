@@ -21,6 +21,40 @@ if vim.fn.has('wsl') == 1 and not vim.g.vscode then
 end
 
 vim.cmd('source ~/.vimrc.base')
+vim.cmd([[
+silent! set langmenu=none
+silent! set nocompatible
+silent! set smarttab
+silent! set expandtab
+silent! set tabstop=4
+silent! set cindent shiftwidth=4
+silent! set cinoptions=>s,e0,n0,f0,{0,}0,^0,:0,=s,l0,b0,g0,hs,ps,ts,is,+s,c3,C0,0,(0,us,U0,w0,W0,m0,j0,)20,*30
+silent! set shiftround
+silent! set autoindent
+silent! set smartindent
+silent! set showmatch
+silent! set backspace=indent,eol,start
+silent! set completeopt=menuone,noselect
+silent! set noeb
+silent! set mouse=a
+silent! set wildmenu
+silent! set cmdheight=1
+silent! set ruler
+silent! set shortmess=aoOtTI
+silent! set lazyredraw
+silent! set display+=lastline
+silent! set laststatus=2
+silent! set hidden
+silent! set autoread
+silent! set termguicolors
+silent! set t_Co=256
+silent! set encoding=utf-8
+silent! set fileencodings=utf-8,ucs-bom,gbk,cp936,latin-1
+silent! set splitright
+silent! set splitbelow
+silent! set matchtime=0
+silent! set noacd
+]])
 -- 允许关闭文件后 undo
 vim.opt.undofile = true
 vim.opt.undodir = '/tmp/nvim/undo'
@@ -207,6 +241,38 @@ elseif vim.g.vscode then
     -- Ensure lazy.nvim is on the runtimepath when running embedded in VSCode
     -- so subsequent calls to `require('lazy')` succeed.
     local vscode = require('vscode')
+
+    local vscode_general = vim.api.nvim_create_augroup("VscodeGeneral", { clear = false })
+    vim.api.nvim_clear_autocmds({ group = vscode_general, event = "BufWinEnter" })
+    vim.api.nvim_create_autocmd("BufWinEnter", {
+        group = vscode_general,
+        callback = function()
+            local info = vim.fn.getbufinfo(vim.api.nvim_get_current_buf())[1]
+            if not info then
+                return
+            end
+
+            local vars = info.variables or {}
+            local vscode_uri = vars.vscode_uri
+            local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ""
+
+            if (vscode_uri == nil or vscode_uri == "")
+                and (info.name == nil or info.name == "")
+                and info.changed == 0
+                and (info.linecount or 1) <= 1
+                and first_line == "" then
+                return
+            end
+
+            vim.fn.VSCodeExtensionNotify(
+                "external-buffer",
+                info,
+                vim.bo.expandtab and 1 or 0,
+                vim.bo.tabstop
+            )
+        end,
+    })
+
     -- using 'open default keyboard shortcuts' to see the command list
     vim.keymap.set({ "n" }, "mm", function () vscode.action("bookmarks.toggle") end , { noremap = true })
     vim.keymap.set({ "n" }, "mp", function () vscode.action("bookmarks.jumpToPrevious") end, { noremap = true })
@@ -250,7 +316,7 @@ elseif vim.g.vscode then
     vim.keymap.set({'n'}, 'gi', function() vscode.action("editor.action.goToImplementation") end, { noremap = true })
     vim.keymap.set({'n'}, 'go', function() vscode.action("workbench.action.navigateBack") end, { noremap = true })
     vim.keymap.set({'n'}, 'gd', function() vscode.action("editor.action.revealDefinition") end, { noremap = true })
-    vim.keymap.set({'n'}, 'gp', function() vscode.action("workbench.action.navigateToLastEditLocation") end, { noremap = true })
+    vim.keymap.set({'n'}, 'gp', function() vscode.action("workbench.action.navigateBackInEditLocations") end, { noremap = true })
     vim.keymap.set({'n'}, 'gn', function() vscode.action("workbench.action.navigateForwardInEditLocations") end, { noremap = true })
     vim.keymap.set({'n'}, 'gq', function() vscode.action("editor.action.marker.nextInFiles") end, { noremap = true })
     -- vim.keymap.set({'n','x'}, '<Right>', function() vscode.action("workbench.action.navigateRight") end, { noremap = true })
