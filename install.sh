@@ -3,10 +3,10 @@ if [[ $(uname) = "Darwin" ]]; then
     export OS="OSX"
 elif grep -q Microsoft /proc/version; then
     export OS="wsl1"
-    export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    export PATH="$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 elif grep -q microsoft /proc/version; then
     export OS="wsl2"
-    export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    export PATH="$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 else
     export OS="linux"
 fi
@@ -53,7 +53,7 @@ if grep -qa docker /proc/self/cgroup; then
 fi
 
 if [ -z "$SSH_CONNECTION" ]; then
-    if python3 -m venv --help > /dev/null 2>&1; then
+    if ! python3 -m venv --help > /dev/null 2>&1; then
         echo "'venv'(https://docs.python.org/3/library/venv.html) doesn't exist, please install it and try again."
         # exit 1
     fi
@@ -74,7 +74,7 @@ if [ -z "$SSH_CONNECTION" ]; then
                 sudo brew install python3-pip python3-venv
             fi
         fi
-        pip3 install virtualenv
+        pip3 install virtualenv > /dev/null 2>&1 || true  # PEP 668 rejects system pip installs
     fi
 fi
 
@@ -114,9 +114,33 @@ then
     fi
 fi
 
-if [ -z "$SSH_CONNECTION" ]; then
-    git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git $GIT_DIR/fonts
-    bash ./fonts/install.sh Hack
-    rm -rf $GIT_DIR/fonts
+# Hack Nerd Font: fetch only the Hack release archive; on WSL install it for Windows terminals
+if [[ $OS = "OSX" ]]; then
+    FONT_DIR="$HOME/Library/Fonts"
+elif [[ $OS = wsl* ]]; then
+    [[ $WIN_HOME = /mnt/* ]] && FONT_DIR="$WIN_HOME/AppData/Local/Microsoft/Windows/Fonts"
+else
+    FONT_DIR="$HOME/.local/share/fonts"
+fi
+if [ -z "$SSH_CONNECTION" ] && [ -n "$FONT_DIR" ] && [ ! -f "$FONT_DIR/HackNerdFont-Regular.ttf" ]; then
+    FONT_TMP="$(mktemp -d)"
+    if curl -fsSL -o "$FONT_TMP/Hack.tar.xz" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.tar.xz \
+        && tar -xJf "$FONT_TMP/Hack.tar.xz" -C "$FONT_TMP"; then
+        mkdir -p "$FONT_DIR"
+        for font in "$FONT_TMP"/*.ttf; do
+            cp "$font" "$FONT_DIR/"
+            if [[ $OS = wsl* ]]; then
+                # Per-user fonts on Windows are registered under HKCU
+                /mnt/c/Windows/System32/reg.exe add 'HKCU\Software\Microsoft\Windows NT\CurrentVersion\Fonts' \
+                    /v "$(basename "$font" .ttf) (TrueType)" /t REG_SZ \
+                    /d "$(wslpath -w "$FONT_DIR/$(basename "$font")")" /f > /dev/null
+            fi
+        done
+        [[ $OS = "linux" ]] && fc-cache -f > /dev/null 2>&1
+        echo "→ Installed Hack Nerd Font to $FONT_DIR"
+    else
+        echo "✗ Failed to download Hack Nerd Font"
+    fi
+    rm -rf "$FONT_TMP"
 fi
 
