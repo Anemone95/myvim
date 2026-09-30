@@ -19,13 +19,24 @@ then
 fi
 
 rm -rf $HOME/.config/nvim
-rm -r ~/.local/share/nvim/
-rm -r ~/.local/state/nvim/
 ln -s -f $GIT_DIR/_vimrc ~/.vimrc
 ln -s -f $GIT_DIR/nvim ~/.config/nvim
 ln -s -f $GIT_DIR/_vimrc.base ~/.vimrc.base
 ln -s -f $GIT_DIR/_vimrc.unimap ~/.vimrc.unimap
 ln -s -f $GIT_DIR/_ideavimrc ~/.ideavimrc
+
+# JetBrains Client on Windows reads ideavimrc from %USERPROFILE%
+if [[ $OS = wsl* ]] && [ -x /mnt/c/Windows/System32/cmd.exe ]; then
+    WIN_PROFILE="$(cd /mnt/c && /mnt/c/Windows/System32/cmd.exe /c 'echo %USERPROFILE%' | tr -d '\r')"
+    # Empty WIN_PROFILE makes wslpath return ".", which would write through the Linux symlinks
+    WIN_HOME="$(wslpath "$WIN_PROFILE")"
+fi
+if [[ $WIN_HOME = /mnt/* ]]; then
+    WSL_GIT_DIR="//wsl.localhost/$WSL_DISTRO_NAME$GIT_DIR"
+    echo "source $WSL_GIT_DIR/_ideavimrc" > "$WIN_HOME/_ideavimrc"
+    echo "source $WSL_GIT_DIR/_vimrc.base" > "$WIN_HOME/.vimrc.base"
+    echo "source $WSL_GIT_DIR/_vimrc.unimap" > "$WIN_HOME/.vimrc.unimap"
+fi
 
 
 # if in docker then return
